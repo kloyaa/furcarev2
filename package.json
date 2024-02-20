@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "init": "npm install concurrently nodemon -g",
+        "start:seeding": "concurrently \"cd __server__ && npm run start:seeding\"",
+        "start:install": "concurrently \"cd __server__ && npm install\"",
+        "start:server": "concurrently \"cd __server__ && npm run start:local\""
+    }
+}

@@ -1,4 +1,5 @@
 import { Types } from 'mongoose';
+import { BookingStatus } from '../../enum/booking.enum';
 
 export interface IUser extends Document {
   username: string;
@@ -65,4 +66,11 @@ export interface IPet extends Document {
     feedingInstructions: string;
     medicationInstructions: string;
   }
+}
+
+export interface IBooking extends Document {
+  user: Types.ObjectId;
+  pet: Types.ObjectId;
+  service: Types.ObjectId;
+  status: BookingStatus
 }

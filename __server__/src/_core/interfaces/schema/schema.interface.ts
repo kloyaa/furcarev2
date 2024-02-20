@@ -70,7 +70,35 @@ export interface IPet extends Document {
 
 export interface IBooking extends Document {
   user: Types.ObjectId;
+  staff?: Types.ObjectId;
   pet: Types.ObjectId;
-  service: Types.ObjectId;
-  status: BookingStatus
+  application: Types.ObjectId;
+  status: BookingStatus;
+  payable: Number;
 }
+
+export interface IGroomingApplication extends Document {
+  serviceName: string;
+  otherInformation: string;
+  schedule: Types.ObjectId;
+}
+
+export interface IBoardingApplication extends Document {
+  serviceName: string;
+  schedule: Date;
+  daysOfStay: Number;
+  cage: Types.ObjectId;
+}
+
+export interface ITransitApplication extends Document {
+  schedule: Date;
+}
+
+export interface IBookingSchedule extends Document {
+  title: string;
+}
+
+export interface IBookingCage extends Document {
+  title: string;
+}
+

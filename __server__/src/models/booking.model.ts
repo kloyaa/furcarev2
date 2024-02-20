@@ -9,14 +9,21 @@ const bookingSchema = new Schema<IBooking>(
             ref: 'User',
             required: true,
         },
+        staff: {
+            type: Schema.Types.ObjectId,
+            required: false,
+        }, // Populate during edit or update status
         pet: {
             type: Schema.Types.ObjectId,
             ref: 'Pet',
             required: true,
         },
-        service: {
+        application: {
             type: Schema.Types.ObjectId,
-            ref: 'Service',
+            required: true,
+        },
+        payable: {
+            type: Number,
             required: true,
         },
         status: {

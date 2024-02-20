@@ -1,56 +1,13 @@
 require('dotenv').config();
 import bcrypt from 'bcrypt';
 import User from "../../../models/user.model";
-import { seedAdminAccounts, seedAdminProfiles, seedRoleNames, seedStaffAccounts, seedUserAccounts } from '../../const/accounts.const';
+import { seedAdminAccounts, seedRoleNames, seedStaffAccounts, seedUserAccounts } from '../../const/accounts.const';
 import { closeDB, connectDB } from './db.util';
-import Profile from '../../../models/profile.model';
 import RoleName from '../../../models/role_name.schema';
 import UserRole from '../../../models/user_role.schema';
-
-// const createAdminAccount = async (): Promise<any> => {
-//     try {
-
-//         const salt = await bcrypt.genSalt(10);
-//         const hashedPassword = await bcrypt.hash(seedAdminAccounts[0].password, salt);
-
-//         console.log(` -> Creating admin account ${seedAdminAccounts[0].username}...`)
-
-//         const createUser = new User({
-//             "username": seedAdminAccounts[0].username,
-//             "email": seedAdminAccounts[0].email,
-//             "password": hashedPassword,
-//             "origin": seedAdminAccounts[0].origin
-//         })
-
-//         await createUser.save();
-
-//         const createProfile = new Profile({
-//             user: createUser._id,
-//             "firstName": seedAdminProfiles[0].firstName,
-//             "middleName": "",
-//             "lastName": seedAdminProfiles[0].lastName,
-//             "birthdate": "06-21-2000",
-//             "address": {
-//                 "present": seedAdminProfiles[0].address.present,
-//                 "permanent": seedAdminProfiles[0].address.permanent
-//             },
-//             "contact": {
-//                 "email": seedAdminProfiles[0].contact.email,
-//                 "number": seedAdminProfiles[0].contact.number
-//             },
-//             "gender": seedAdminProfiles[0].gender
-//         })
-
-//         await createProfile.save();
-
-//         await createRoles({ admins: [createUser] })
-
-//         return true;
-//     } catch (error) {
-//         console.log(error)
-//         return false;
-//     }
-// }
+import BookingSchedule from '../../../models/schedule.model';
+import { seedCageSizes, seedSchedules } from '../../const/booking_seed_data.const';
+import Cage from '../../../models/cage.schema';
 
 const registerAccounts = async (): Promise<any> => {
     try {
@@ -186,12 +143,57 @@ const createRoles = async ({ users, staffs, admins }: any): Promise<any> => {
     }
 }
 
+const createSchedules = async (): Promise<any> => {
+    try {
+        console.log("Deleting previous schedules seeds...")
+        await BookingSchedule.deleteMany({})
+        console.log("Creating schedules...")
+        const schedules = await Promise.all(seedSchedules.map(async (el) => {
+            console.log(` -> Creating scedule ${el.title}...`)
+            return {
+                "title": el?.title,
+            };
+        }));
+
+        await BookingSchedule.insertMany([...schedules]);
+
+        return true;
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+}
+
+const createCages = async (): Promise<any> => {
+    try {
+        console.log("Deleting previous cages seeds...")
+        await Cage.deleteMany({})
+        console.log("Creating cages...")
+        const cages = await Promise.all(seedCageSizes.map(async (el) => {
+            console.log(` -> Creating cage ${el.title}...`)
+            return {
+                "title": el?.title,
+            };
+        }));
+
+        await Cage.insertMany([...cages]);
+
+        return true;
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+}
+
+
 async function runSeed() {
     try {
         await connectDB();
 
         await roleName();
         await registerAccounts();
+        await createSchedules();
+        await createCages();
 
         await closeDB();
     } catch (error) {

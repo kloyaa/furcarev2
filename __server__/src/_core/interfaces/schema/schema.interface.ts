@@ -42,3 +42,27 @@ export interface IUserRole extends Document {
   user: Types.ObjectId;
   role: Types.ObjectId;
 }
+
+export interface IPetOwner extends Document {
+  user: Types.ObjectId;
+  name: string;
+  address: string;
+  mobileNo: string;
+  email: string;
+  emergencyContactNo: string;
+  work: string;
+}
+
+export interface IPet extends Document {
+  user: Types.ObjectId;
+  name: string;
+  specie: string;
+  age: number;
+  gender: string;
+  identification: string;
+  additionalInfo: {
+    historyOfBitting: boolean;
+    feedingInstructions: string;
+    medicationInstructions: string;
+  }
+}

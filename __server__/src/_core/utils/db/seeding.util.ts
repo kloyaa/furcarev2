@@ -1,0 +1,203 @@
+require('dotenv').config();
+import bcrypt from 'bcrypt';
+import User from "../../../models/user.model";
+import { seedAdminAccounts, seedAdminProfiles, seedRoleNames, seedStaffAccounts, seedUserAccounts } from '../../const/accounts.const';
+import { closeDB, connectDB } from './db.util';
+import Profile from '../../../models/profile.model';
+import RoleName from '../../../models/role_name.schema';
+import UserRole from '../../../models/user_role.schema';
+
+// const createAdminAccount = async (): Promise<any> => {
+//     try {
+
+//         const salt = await bcrypt.genSalt(10);
+//         const hashedPassword = await bcrypt.hash(seedAdminAccounts[0].password, salt);
+
+//         console.log(` -> Creating admin account ${seedAdminAccounts[0].username}...`)
+
+//         const createUser = new User({
+//             "username": seedAdminAccounts[0].username,
+//             "email": seedAdminAccounts[0].email,
+//             "password": hashedPassword,
+//             "origin": seedAdminAccounts[0].origin
+//         })
+
+//         await createUser.save();
+
+//         const createProfile = new Profile({
+//             user: createUser._id,
+//             "firstName": seedAdminProfiles[0].firstName,
+//             "middleName": "",
+//             "lastName": seedAdminProfiles[0].lastName,
+//             "birthdate": "06-21-2000",
+//             "address": {
+//                 "present": seedAdminProfiles[0].address.present,
+//                 "permanent": seedAdminProfiles[0].address.permanent
+//             },
+//             "contact": {
+//                 "email": seedAdminProfiles[0].contact.email,
+//                 "number": seedAdminProfiles[0].contact.number
+//             },
+//             "gender": seedAdminProfiles[0].gender
+//         })
+
+//         await createProfile.save();
+
+//         await createRoles({ admins: [createUser] })
+
+//         return true;
+//     } catch (error) {
+//         console.log(error)
+//         return false;
+//     }
+// }
+
+const registerAccounts = async (): Promise<any> => {
+    try {
+        console.log("Deleting previous account seeds...")
+
+        await User.deleteMany()
+
+        console.log("Creating accounts...")
+
+        const userAccounts = await Promise.all(seedUserAccounts.map(async (el) => {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(el.password, salt);
+            console.log(` -> Creating customer account ${el.username}...`)
+            return {
+                "username": el.username,
+                "email": el.email,
+                "password": hashedPassword,
+                "origin": el.origin
+            };
+        }));
+
+        const staffAccounts = await Promise.all(seedStaffAccounts.map(async (el) => {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(el.password, salt);
+            console.log(` -> Creating staff account ${el.username}...`)
+            return {
+                "username": el.username,
+                "email": el.email,
+                "password": hashedPassword,
+                "origin": el.origin
+            };
+        }));
+
+        const adminAccounts = await Promise.all(seedAdminAccounts.map(async (el) => {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(el.password, salt);
+            console.log(` -> Creating admin account ${el.username}...`)
+            return {
+                "username": el.username,
+                "email": el.email,
+                "password": hashedPassword,
+                "origin": el.origin
+            };
+        }));
+
+        const users = await User.insertMany(userAccounts);
+        const staffs = await User.insertMany(staffAccounts);
+        const admins = await User.insertMany(adminAccounts);
+
+        await createRoles({ staffs, users, admins });
+
+        return true;
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+};
+
+const roleName = async (): Promise<any> => {
+    try {
+        console.log("Deleting previous role names seeds...")
+        await RoleName.deleteMany({})
+        console.log("Creating role names...")
+        const roles = await Promise.all(seedRoleNames.map(async (el) => {
+            console.log(` -> Creating ${el.name} role...`)
+            return {
+                "name": el.name,
+            };
+        }));
+
+        await RoleName.insertMany([...roles]);
+
+        return true;
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+}
+
+const createRoles = async ({ users, staffs, admins }: any): Promise<any> => {
+    try {
+        console.log("Deleting previous user roles seeds...")
+        await UserRole.deleteMany()
+        console.log("Creating user roles...")
+        const [customerRoleName, staffRoleName, adminRoleName] = await Promise.all([
+            RoleName.findOne({ name: "Customer" }),
+            RoleName.findOne({ name: "Staff" }),
+            RoleName.findOne({ name: "Administrator" })
+        ]);
+
+        if (users) {
+            const customerRoles = await Promise.all(users?.map(async (el: any) => {
+                console.log(` -> Assigning ${el.username} as ${customerRoleName?.name}...`)
+                return {
+                    "user": el._id,
+                    "role": customerRoleName?._id,
+                    "name": el.name,
+                };
+            }));
+
+            await UserRole.insertMany([...customerRoles])
+        }
+
+        if (staffs) {
+            const staffRoles = await Promise.all(staffs?.map(async (el: any) => {
+                console.log(` -> Assigning ${el.username} as ${staffRoleName?.name}...`)
+                return {
+                    "user": el._id,
+                    "role": staffRoleName?._id,
+                    "name": el.name,
+                };
+            }));
+
+            await UserRole.insertMany([...staffRoles])
+        }
+
+        if (admins) {
+            const adminRoles = await Promise.all(admins?.map(async (el: any) => {
+                console.log(` -> Assigning ${el.username} as ${adminRoleName?.name}...`)
+                return {
+                    "user": el._id,
+                    "role": adminRoleName?._id,
+                    "name": el.name,
+                };
+            }));
+
+            await UserRole.insertMany([...adminRoles])
+
+        }
+    } catch (error) {
+        console.log(error)
+        return false;
+    }
+}
+
+async function runSeed() {
+    try {
+        await connectDB();
+
+        await roleName();
+        await registerAccounts();
+
+        await closeDB();
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+runSeed();

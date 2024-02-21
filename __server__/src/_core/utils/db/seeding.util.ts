@@ -6,8 +6,9 @@ import { closeDB, connectDB } from './db.util';
 import RoleName from '../../../models/role_name.schema';
 import UserRole from '../../../models/user_role.schema';
 import BookingSchedule from '../../../models/schedule.model';
-import { seedCageSizes, seedSchedules } from '../../const/booking_seed_data.const';
+import { seedCageSizes, seedSchedules, seedServiceFees } from '../../const/booking_seed_data.const';
 import Cage from '../../../models/cage.schema';
+import ServiceFee from '../../../models/service_fee.schema';
 
 const registerAccounts = async (): Promise<any> => {
   try {
@@ -204,6 +205,30 @@ const createCages = async (): Promise<any> => {
   }
 };
 
+const createServiceFees = async (): Promise<any> => {
+  try {
+    console.log('Deleting previous service fees seeds...');
+    await ServiceFee.deleteMany({});
+    console.log('Creating service fees...');
+    const services = await Promise.all(
+      seedServiceFees.map(async (el: any) => {
+        console.log(` -> Creating fee for ${el.title}...`);
+        return {
+          title: el?.title,
+          fee: Number(el?.fee)
+        };
+      }),
+    );
+
+    await ServiceFee.insertMany([...services]);
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 async function runSeed() {
   try {
     await connectDB();
@@ -212,6 +237,7 @@ async function runSeed() {
     await registerAccounts();
     await createSchedules();
     await createCages();
+    await createServiceFees();
 
     await closeDB();
   } catch (error) {

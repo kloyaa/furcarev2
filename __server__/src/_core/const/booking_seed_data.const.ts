@@ -9,3 +9,9 @@ export const seedSchedules = [
 ];
 
 export const seedCageSizes = [{ title: 'Large' }, { title: 'Small' }, { title: 'Medium' }];
+
+export const seedServiceFees = [
+  { title: "boarding", fee: 350.00 },
+  { title: "transit", fee: 390.00 },
+  { title: "grooming", fee: 440.00 }
+]

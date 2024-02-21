@@ -102,3 +102,8 @@ export interface IBookingSchedule extends Document {
 export interface IBookingCage extends Document {
   title: string;
 }
+
+export interface IServiceFee extends Document {
+  title: string;
+  fee: Number;
+}

@@ -27,7 +27,7 @@ const profileSchema = new Schema<IProfile>(
       },
       permanent: {
         type: String,
-        required: false,
+        required: true,
       },
     },
     contact: {

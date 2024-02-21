@@ -19,6 +19,10 @@ export const statuses = {
     message: 'Failed',
     code: '03',
   },
+  '04': {
+    message: 'Duplicate',
+    code: '04',
+  },
   /**
    * @alias Authentication
    * @description from 0050 - 0100
@@ -68,12 +72,28 @@ export const statuses = {
     code: '0060',
   },
   '0061': {
-    message: 'Role not assigned. Please contact the administrator.',
+    message: 'Username and/or Email is already registered, Please try another.',
     code: '0061',
+  },
+  '0062': {
+    message: "Oops! Your password and confirmation didn't match. Please re-enter to match them up.",
+    code: '0062',
+  },
+  '0063': {
+    message: 'Password does not match.',
+    code: '0063',
+  },
+  '0064': {
+    message: 'Current and New password cannot be the same.',
+    code: '0064',
   },
   '0070': {
     message: 'Incorrect Secret and/or Access key.',
     code: '0070',
+  },
+  '0071': {
+    message: 'User role not assigned. Please contact the administrator.',
+    code: '0071',
   },
   /**
    * @alias Profile
@@ -136,5 +156,19 @@ export const statuses = {
   '10020': {
     message: 'Session expired. Please login and try again.',
     code: '10020',
+  },
+
+  // custom
+  '99000': {
+    message: 'Pet Owner profile not found.',
+    code: '99000',
+  },
+  '99001': {
+    message: 'Pet profile not found.',
+    code: '99001',
+  },
+  '99002': {
+    message: 'Booking not found.',
+    code: '99002',
   },
 };

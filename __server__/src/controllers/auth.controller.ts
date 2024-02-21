@@ -13,6 +13,8 @@ import { encrypt } from '../_core/utils/security/encryption.util';
 import RoleName from '../models/role_name.schema';
 import UserRole from '../models/user_role.schema';
 import { getUserRoleName } from '../services/role.service';
+import { TRequest } from '../_core/interfaces/overrides.interface';
+import { validatorChangePassword } from '../_core/validators/user.validator';
 
 export const login = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -20,7 +22,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     if (error) {
       return res.status(400).json({
         ...statuses['501'],
-        error: error.details[0].message.replace(/['"]/g, ''),
+        message: error.details[0].message.replace(/['"]/g, ''),
       });
     }
 
@@ -47,7 +49,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
 
     const userRole = await getUserRoleName(user.id);
     if(!userRole) {
-      return res.status(403).json(statuses['0061']);
+      return res.status(403).json(statuses['0071']);
     }
 
     const env = await getEnv();
@@ -72,7 +74,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     if (error) {
       return res.status(400).json({
         ...statuses['501'],
-        error: error.details[0].message.replace(/['"]/g, ''),
+        message: error.details[0].message.replace(/['"]/g, ''),
       });
     }
 
@@ -134,7 +136,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
 
     const userRole = await getUserRoleName(createdUser.id);
     if(!userRole) {
-      return res.status(403).json(statuses['0061']);
+      return res.status(403).json(statuses['0071']);
     }
 
     const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? '123_cryptoKey');
@@ -149,3 +151,48 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     return res.status(401).json(statuses['0900']);
   }
 };
+
+export const changeUserPassword = async (req: TRequest, res: Response) => {
+  const error = validatorChangePassword(req.body);
+  if (error) {
+    return res.status(400).json({
+      ...statuses['501'],
+      message: error.details[0].message.replace(/['"]/g, ''),
+    });
+  }
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json(statuses['0056']);
+    }
+
+    const passwordMatched: boolean = await bcrypt.compare(currentPassword, user.password);
+    if (!passwordMatched) {
+      return res.status(403).json(statuses['0063']);
+    }
+
+    if (currentPassword === newPassword) {
+      return res.status(403).json(statuses['0064']);
+    }
+
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await User.findByIdAndUpdate(req.user.id,
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    emitter.emit(EventName.ACTIVITY, {
+      user: user.id,
+      description: ActivityType.CHANGE_PASSWORD,
+    } as IActivity);
+
+    return res.status(200).json(statuses["00"]);
+  } catch (error) {
+    console.log('@updateUserPassword error', error);
+    return res.status(500).json(statuses['0900']);
+  }
+}

@@ -4,8 +4,26 @@ export enum EventName {
 }
 
 export enum ActivityType {
-  LOGIN = 'Login success',
-  REGISTRATION_SUCCESS = 'Registration success',
+  LOGIN = 'Logged in successfully',
+  CHANGE_PASSWORD = 'Changed password successfully',
+  REGISTRATION_SUCCESS = 'Registered successfully',
+  EKYC_SUCCESS = 'EKYC completed',
+  SEED_USER_ACCOUNT = 'Seeded user account successfully',
   PROFILE_CREATED = 'Profile created',
   PROFILE_UPDATED = 'Profile updated',
+
+  PET_REMOVED = 'Pet removed',
+  PET_ADDED = 'Pet added',
+  PET_UPDATED = 'Pet updated',
+
+  PET_OWNER_REMOVED = 'Pet Owner removed',
+  PET_OWNER_ADDED = 'Pet Owner profile created',
+  PET_OWNER_UPDATED = 'Pet Owner profile updated',
+
+  BOOKING_CREATED = 'Booking created',
+  BOOKING_UPDATED = 'Your booking was recently updated',
+  BOOKING_DECLINED = 'Your booking was declined',
+  BOOKING_COMPLETED = 'Your booking was completed',
+  BOOKING_ACCEPTED = 'Your booking was accepted',
+  BOOKING_CANCELLED = 'Your booking was cancelled',
 }

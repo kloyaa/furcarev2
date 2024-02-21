@@ -8,6 +8,6 @@ const commonMiddlewares = [isAuthenticated];
 
 router.post('/user/v1/profile', commonMiddlewares, createProfile as any);
 router.get('/user/v1/profile', commonMiddlewares, getProfileByAccessToken as any);
-router.patch('/user/v1/profile', commonMiddlewares, updateProfileByAccessToken as any);
+router.put('/user/v1/profile', commonMiddlewares, updateProfileByAccessToken as any);
 
 export default router;

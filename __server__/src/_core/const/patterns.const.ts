@@ -12,7 +12,7 @@
     .+: Matches one or more of any characters (to ensure the username contains characters other than just the required uppercase, lowercase, numeric, and special characters).
     $: Matches the end of the string.
  */
-export const passwordRegexp = new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).+$/)
+export const passwordRegexp = new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).+$/);
 
 /**
     javascript
@@ -27,4 +27,4 @@ export const passwordRegexp = new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@
     .+: Matches one or more of any characters (to ensure the username contains characters other than just the required uppercase, lowercase, and numeric characters).
     $: Matches the end of the string.
  */
-export const usernameRegexp = new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/)
+export const usernameRegexp = new RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/);

@@ -52,9 +52,7 @@ export const createProfile = async (req: TRequest, res: Response) => {
 export const getProfileByAccessToken = async (req: TRequest, res: Response) => {
   try {
     const user = req.user.id;
-    const result = await Profile
-      .findOne({ user })
-      .exec();
+    const result = await Profile.findOne({ user }).exec();
 
     if (!result) {
       return res.status(404).json(statuses['02']);
@@ -65,7 +63,7 @@ export const getProfileByAccessToken = async (req: TRequest, res: Response) => {
     console.log('@getProfileByAccessToken error', error);
     return res.status(401).json(statuses['0900']);
   }
-}
+};
 
 export const updateProfileByAccessToken = async (req: TRequest, res: Response) => {
   const error = validateUpdateProfile(req.body);
@@ -84,10 +82,9 @@ export const updateProfileByAccessToken = async (req: TRequest, res: Response) =
 
     const { keys, values: keyVal } = req.body;
 
-    if(!keys?.length || !keyVal?.length) {
+    if (!keys?.length || !keyVal?.length) {
       return res.status(400).json(statuses['501']);
-    }
-    else if(keys?.length != keyVal?.length) {
+    } else if (keys?.length != keyVal?.length) {
       return res.status(400).json(statuses['502']);
     }
 
@@ -103,12 +100,12 @@ export const updateProfileByAccessToken = async (req: TRequest, res: Response) =
       } else if (field === 'birthdate') {
         existingProfile.birthdate = value;
       } else if (field === 'address') {
-        if(isEmpty(value?.present) || isEmpty(value?.permanent)) {
+        if (isEmpty(value?.present) || isEmpty(value?.permanent)) {
           return res.status(400).json(statuses['502']);
         }
         existingProfile.address = value;
       } else if (field === 'contact') {
-        if(isEmpty(value?.email) || isEmpty(value?.number)) {
+        if (isEmpty(value?.email) || isEmpty(value?.number)) {
           return res.status(400).json(statuses['502']);
         }
         existingProfile.contact = value;
@@ -129,4 +126,4 @@ export const updateProfileByAccessToken = async (req: TRequest, res: Response) =
     console.log('@updateProfileByAccessToke error', error);
     return res.status(401).json(statuses['0900']);
   }
-}
+};

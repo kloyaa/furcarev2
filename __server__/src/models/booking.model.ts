@@ -3,36 +3,36 @@ import { IBooking } from '../_core/interfaces/schema/schema.interface';
 import { BookingStatus } from '../_core/enum/booking.enum';
 
 const bookingSchema = new Schema<IBooking>(
-    {
-        user: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-        staff: {
-            type: Schema.Types.ObjectId,
-            required: false,
-        }, // Populate during edit or update status
-        pet: {
-            type: Schema.Types.ObjectId,
-            ref: 'Pet',
-            required: true,
-        },
-        application: {
-            type: Schema.Types.ObjectId,
-            required: true,
-        },
-        payable: {
-            type: Number,
-            required: true,
-        },
-        status: {
-            type: String,
-            enum: Object.values(BookingStatus),
-            required: true,
-        },
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
-    { timestamps: true },
+    staff: {
+      type: Schema.Types.ObjectId,
+      required: false,
+    }, // Populate during edit or update status
+    pet: {
+      type: Schema.Types.ObjectId,
+      ref: 'Pet',
+      required: true,
+    },
+    application: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    payable: {
+      type: Number,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: Object.values(BookingStatus),
+      required: true,
+    },
+  },
+  { timestamps: true },
 );
 
 const Booking = model<IBooking>('Booking', bookingSchema);

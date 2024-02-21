@@ -3,19 +3,19 @@ import { IRoleName, IUserRole } from '../_core/interfaces/schema/schema.interfac
 
 // Define the RoleName Schema
 const userRoleSchema = new Schema<IUserRole>(
-    {
-        user: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-        role: {
-            type: Schema.Types.ObjectId,
-            ref: 'RoleName',
-            required: true,
-        },
+  {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
-    { timestamps: true },
+    role: {
+      type: Schema.Types.ObjectId,
+      ref: 'RoleName',
+      required: true,
+    },
+  },
+  { timestamps: true },
 );
 
 // Create the Activity model

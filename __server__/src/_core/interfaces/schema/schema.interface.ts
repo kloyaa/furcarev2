@@ -65,7 +65,7 @@ export interface IPet extends Document {
     historyOfBitting: boolean;
     feedingInstructions: string;
     medicationInstructions: string;
-  }
+  };
 }
 
 export interface IBooking extends Document {
@@ -101,4 +101,3 @@ export interface IBookingSchedule extends Document {
 export interface IBookingCage extends Document {
   title: string;
 }
-

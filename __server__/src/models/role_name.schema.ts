@@ -3,13 +3,13 @@ import { IRoleName } from '../_core/interfaces/schema/schema.interface';
 
 // Define the RoleName Schema
 const roleNameSchema = new Schema<IRoleName>(
-    {
-        name: {
-            type: String,
-            required: true,
-        },
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    { timestamps: true },
+  },
+  { timestamps: true },
 );
 
 // Create the Activity model

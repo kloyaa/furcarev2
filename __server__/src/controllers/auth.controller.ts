@@ -43,15 +43,12 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     } as IActivity);
 
     const env = await getEnv();
-    const payload = { origin: req.headers['nodex-user-origin'], id: user.id }
-    const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? "123_cryptoKey")
+    const payload = { origin: req.headers['nodex-user-origin'], id: user.id };
+    const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? '123_cryptoKey');
 
     return res.status(200).json({
       ...statuses['00'],
-      data: await generateJwt(
-        encryptedPayload,
-        env.JWT_SECRET_KEY || '123_secretKey',
-      ),
+      data: await generateJwt(encryptedPayload, env.JWT_SECRET_KEY || '123_secretKey'),
     });
   } catch (error) {
     console.log('@login error', error);
@@ -96,17 +93,13 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     } as IActivity);
 
     const env = await getEnv();
-    const payload = { origin: req.headers['nodex-user-origin'], id: createdUser.id }
-    const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? "123_cryptoKey")
+    const payload = { origin: req.headers['nodex-user-origin'], id: createdUser.id };
+    const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? '123_cryptoKey');
 
     return res.status(201).json({
       ...statuses['0050'],
-      data: await generateJwt(
-        encryptedPayload,
-        env.JWT_SECRET_KEY || '123_secretkey',
-      ),
+      data: await generateJwt(encryptedPayload, env.JWT_SECRET_KEY || '123_secretkey'),
     });
-
   } catch (error) {
     console.log('@register error', error);
     return res.status(401).json(statuses['0900']);

@@ -59,9 +59,11 @@ const registerAccounts = async (): Promise<any> => {
       }),
     );
 
-    const users = await User.insertMany(userAccounts);
-    const staffs = await User.insertMany(staffAccounts);
-    const admins = await User.insertMany(adminAccounts);
+    const [users, staffs, admins ] = await Promise.all([
+      User.insertMany(userAccounts),
+      User.insertMany(staffAccounts),
+      User.insertMany(adminAccounts)
+    ])
 
     await createRoles({ staffs, users, admins });
 

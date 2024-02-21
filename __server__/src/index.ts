@@ -10,6 +10,8 @@ import userRoute from './routes/user.route';
 import ownerRoute from './routes/pet_owner.route';
 import petRoute from './routes/pet.route';
 import adminRoute from './routes/admin.route';
+import serviceRoute from './routes/service_fee.route';
+import cageRoute from './routes/cage.route';
 
 import { requestLoggerMiddleware } from './_core/middlewares/request-logger.middleware';
 import { allowApiAccessMiddleware } from './_core/middlewares/allow-access.middleware';
@@ -35,6 +37,8 @@ async function runApp() {
   app.use('/api', ownerRoute);
   app.use('/api', petRoute);
   app.use('/api', adminRoute);
+  app.use('/api', serviceRoute);
+  app.use('/api', cageRoute);
 
   connectDB();
 

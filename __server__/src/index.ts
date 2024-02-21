@@ -7,6 +7,8 @@ import { maintenanceModeMiddleware } from './_core/middlewares/maintenance-mode.
 
 import authRoute from './routes/auth.route';
 import userRoute from './routes/user.route';
+import ownerRoute from './routes/pet-owner.route';
+
 import { requestLoggerMiddleware } from './_core/middlewares/request-logger.middleware';
 import { allowApiAccessMiddleware } from './_core/middlewares/allow-access.middleware';
 
@@ -30,6 +32,7 @@ async function runApp() {
 
   app.use('/api', authRoute);
   app.use('/api', userRoute);
+  app.use('/api', ownerRoute);
 
   // Connect to MongoDB
   connectDB();

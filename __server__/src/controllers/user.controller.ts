@@ -1,8 +1,8 @@
 import { type Response } from 'express';
+import { emitter } from '../_core/events/activity.event';
 import Profile from '../models/profile.model';
 import { validateCreateProfile, validateUpdateProfile } from '../_core/validators/user.validator';
 import { statuses } from '../_core/const/api.statuses';
-import { emitter } from '../_core/events/activity.event';
 import { ActivityType, EventName } from '../_core/enum/activity.enum';
 import { IActivity } from '../_core/interfaces/activity.interface';
 import { TRequest } from '../_core/interfaces/overrides.interface';

@@ -49,9 +49,9 @@ export const createPet = async (req: TRequest, res: Response) => {
     }
 };
 
-export const getPetByAccessToken = async (req: TRequest, res: Response) => {
+export const getPetsByAccessToken = async (req: TRequest, res: Response) => {
     try {
-        const pet = await Pet.findOne({ user: req.user.id });
+        const pet = await Pet.find({ user: req.user.id });
         if (!pet) {
             return res.status(404).json(statuses['99001']);
         }

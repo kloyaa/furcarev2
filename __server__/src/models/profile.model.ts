@@ -45,6 +45,10 @@ const profileSchema = new Schema<IProfile>(
       enum: ['male', 'female', 'other'],
       required: true,
     },
+    isActive: {
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true },
 );

@@ -2,6 +2,7 @@ import { Aggregate } from "mongoose";
 import { TRequest } from "../_core/interfaces/overrides.interface";
 import { type Response } from 'express';
 import User from "../models/user.model";
+import Activity from "../models/activity.model";
 
 export const getCustomers = async (req: TRequest, res: Response) => {
     try {
@@ -168,3 +169,58 @@ export const getStaffs = async (req: TRequest, res: Response) => {
         return null;
     }
 }
+
+export const getCheckInStats = async (req: TRequest, res: Response) => {
+    try {
+        const currentYear = new Date().getFullYear();
+
+        const checkInStats = await Activity.aggregate([
+            {
+                $match: {
+                    description: 'Login success',
+                    createdAt: {
+                        $gte: new Date(`${currentYear}-01-01`),
+                        $lte: new Date(`${currentYear}-12-31`)
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: '$createdAt' },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    month: '$_id',
+                    count: 1
+                }
+            }
+        ]);
+
+        // Manually generate the months array
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        // Create an object to store the result
+        const result: { [key: string]: number } = {};
+
+        // Initialize counts for all months to 0
+        for (const month of months) {
+            result[month] = 0;
+        }
+
+        // Update counts for months where data is available
+        for (const stat of checkInStats) {
+            result[months[stat.month - 1]] = stat.count;
+        }
+
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error('@getCheckInStats error', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};

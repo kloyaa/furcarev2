@@ -21,6 +21,7 @@ export interface IProfile extends Document {
     number: string;
   };
   gender: string;
+  isActive: boolean;
 }
 
 export interface IRequestLog extends Document {

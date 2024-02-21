@@ -179,8 +179,8 @@ export const getCheckInStats = async (req: TRequest, res: Response) => {
                 $match: {
                     description: 'Login success',
                     createdAt: {
-                        $gte: new Date(`${currentYear}-01-01`),
-                        $lte: new Date(`${currentYear}-12-31`)
+                        $gte: new Date(`${currentYear}-01-01`), // Start of the current year
+                        $lte: new Date(`${currentYear}-12-31`)  // End of the current year
                     }
                 }
             },
@@ -218,7 +218,8 @@ export const getCheckInStats = async (req: TRequest, res: Response) => {
             result[months[stat.month - 1]] = stat.count;
         }
 
-        return res.status(200).json(result);
+
+        return res.status(200).json(Object.entries(result).map(([month, count]) => ({ [month.toLowerCase()]: count })));
     } catch (error) {
         console.error('@getCheckInStats error', error);
         return res.status(500).json({ error: 'Internal Server Error' });

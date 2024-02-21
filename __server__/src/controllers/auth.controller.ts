@@ -12,7 +12,7 @@ import User from '../models/user.model';
 import { encrypt } from '../_core/utils/security/encryption.util';
 import RoleName from '../models/role_name.schema';
 import UserRole from '../models/user_role.schema';
-import { getUserRoleName } from '../services/role.service';
+import { findRoleByUser } from '../services/role.service';
 import { TRequest } from '../_core/interfaces/overrides.interface';
 import { validatorChangePassword } from '../_core/validators/user.validator';
 
@@ -47,7 +47,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       description: ActivityType.LOGIN,
     } as IActivity);
 
-    const userRole = await getUserRoleName(user.id);
+    const userRole = await findRoleByUser(user.id);
     if(!userRole) {
       return res.status(403).json(statuses['0071']);
     }
@@ -134,7 +134,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
       await newUserRole.save();
     }
 
-    const userRole = await getUserRoleName(createdUser.id);
+    const userRole = await findRoleByUser(createdUser.id);
     if(!userRole) {
       return res.status(403).json(statuses['0071']);
     }

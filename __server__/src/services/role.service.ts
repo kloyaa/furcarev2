@@ -1,7 +1,7 @@
 import mongoose, { Aggregate } from "mongoose";
 import UserRole from "../models/user_role.schema";
 
-export const getUserRoleName = async (user: string): Promise<string | null> => {
+export const findRoleByUser = async (user: string): Promise<string | null> => {
     try {
         const roleNameAggregate: Aggregate<any[]> = UserRole.aggregate([
             {

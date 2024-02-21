@@ -2,7 +2,7 @@ import { type Response } from 'express';
 import { emitter } from '../_core/events/activity.event';
 import { TRequest } from '../_core/interfaces/overrides.interface';
 import { statuses } from '../_core/const/api.statuses';
-import { validatorSavePetOwner, validatorUpdatePetOwner } from '../_core/validators/pet-owner.validator';
+import { validatorSavePetOwner, validatorUpdatePetOwner } from '../_core/validators/pet_owner.validator';
 import { ActivityType, EventName } from '../_core/enum/activity.enum';
 import { IActivity } from '../_core/interfaces/activity.interface';
 

@@ -67,6 +67,10 @@ export const statuses = {
     message: 'Incomplete number of required headers.',
     code: '0060',
   },
+  '0061': {
+    message: 'Role not assigned. Please contact the administrator.',
+    code: '0061',
+  },
   '0070': {
     message: 'Incorrect Secret and/or Access key.',
     code: '0070',

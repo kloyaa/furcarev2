@@ -10,6 +10,9 @@ import { getEnv } from '../_core/config/env.config';
 
 import User from '../models/user.model';
 import { encrypt } from '../_core/utils/security/encryption.util';
+import RoleName from '../models/role_name.schema';
+import UserRole from '../models/user_role.schema';
+import { getUserRoleName } from '../services/role.service';
 
 export const login = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -42,12 +45,19 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       description: ActivityType.LOGIN,
     } as IActivity);
 
+    const userRole = await getUserRoleName(user.id);
+    if(!userRole) {
+      return res.status(403).json(statuses['0061']);
+    }
+
     const env = await getEnv();
     const payload = { origin: req.headers['nodex-user-origin'], id: user.id };
+
     const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? '123_cryptoKey');
 
     return res.status(200).json({
       ...statuses['00'],
+      role: userRole,
       data: await generateJwt(encryptedPayload, env.JWT_SECRET_KEY || '123_secretKey'),
     });
   } catch (error) {
@@ -94,10 +104,44 @@ export const register = async (req: Request, res: Response): Promise<any> => {
 
     const env = await getEnv();
     const payload = { origin: req.headers['nodex-user-origin'], id: createdUser.id };
+
+    const assignedRole = await UserRole.findOne({ user: createdUser.id });
+
+    if (!assignedRole) {
+      const [customerRoleName, staffRoleName, adminRoleName] = await Promise.all([
+        RoleName.findOne({ name: 'Customer' }),
+        RoleName.findOne({ name: 'Staff' }),
+        RoleName.findOne({ name: 'Administrator' }),
+      ]);
+
+      const newUserRole = new UserRole();
+
+      if (payload.origin === "web") {
+        newUserRole.user = createdUser.id;
+        newUserRole.role = staffRoleName!._id;
+      }
+      else if (payload.origin === "mobile") {
+        newUserRole.user = createdUser.id;
+        newUserRole.role = customerRoleName!._id;
+      }
+      else if (payload.origin === "system") {
+        newUserRole.user = createdUser.id;
+        newUserRole.role = adminRoleName!._id;
+      }
+
+      await newUserRole.save();
+    }
+
+    const userRole = await getUserRoleName(createdUser.id);
+    if(!userRole) {
+      return res.status(403).json(statuses['0061']);
+    }
+
     const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? '123_cryptoKey');
 
     return res.status(201).json({
       ...statuses['0050'],
+      role: userRole,
       data: await generateJwt(encryptedPayload, env.JWT_SECRET_KEY || '123_secretkey'),
     });
   } catch (error) {

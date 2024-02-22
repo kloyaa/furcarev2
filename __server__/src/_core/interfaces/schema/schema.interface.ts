@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { BookingStatus } from '../../enum/booking.enum';
+import { BookingServiceType, BookingStatus } from '../../enum/booking.enum';
 
 export interface IUser extends Document {
   username: string;
@@ -74,7 +74,7 @@ export interface IBooking extends Document {
   staff?: Types.ObjectId;
   pet: Types.ObjectId;
   application: Types.ObjectId;
-  applicationType: BookingStatus;
+  applicationType: BookingServiceType;
   status: BookingStatus;
   payable: Number;
 }

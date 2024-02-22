@@ -7,6 +7,9 @@ import TransitApplication from "../models/transit_application.schema";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
 import { BookingServiceType, BookingStatus } from "../_core/enum/booking.enum";
 import Booking from "../models/booking.model";
+import { EventName, ActivityType } from "../_core/enum/activity.enum";
+import { emitter } from "../_core/events/activity.event";
+import { IActivity } from "../_core/interfaces/activity.interface";
 
 export const createTransitApplication = async (req: TRequest, res: TResponse) => {
     try {
@@ -41,6 +44,11 @@ export const createTransitApplication = async (req: TRequest, res: TResponse) =>
         })
 
         await newBooking.save();
+
+        emitter.emit(EventName.ACTIVITY, {
+            user: req.user.id as any,
+            description: ActivityType.SERVICE_TRANSIT_CREATED,
+        } as IActivity);
 
         return res.status(200).json(statuses["00"])
     } catch (error) {

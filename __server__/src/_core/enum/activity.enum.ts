@@ -26,4 +26,13 @@ export enum ActivityType {
   BOOKING_COMPLETED = 'Your booking was completed',
   BOOKING_ACCEPTED = 'Your booking was accepted',
   BOOKING_CANCELLED = 'Your booking was cancelled',
+
+  SERVICE_GROOMING_COMPLETED = 'Grooming application completed',
+  SERVICE_TRANSIT_COMPLETED = 'Transit application completed',
+  SERVICE_BOARDING_COMPLETED = 'Boarding application completed',
+
+
+  SERVICE_GROOMING_CREATED = 'Grooming application created',
+  SERVICE_TRANSIT_CREATED = 'Transit application created',
+  SERVICE_BOARDING_CREATED = 'boarding application created',
 }

@@ -7,6 +7,9 @@ import { validateCreateBoardingApplication } from "../_core/validators/applicati
 import { BookingServiceType, BookingStatus } from "../_core/enum/booking.enum";
 import Booking from "../models/booking.model";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
+import { emitter } from "../_core/events/activity.event";
+import { ActivityType, EventName } from "../_core/enum/activity.enum";
+import { IActivity } from "../_core/interfaces/activity.interface";
 
 export const createBoardingApplication = async (req: TRequest, res: TResponse) => {
     try {
@@ -50,6 +53,12 @@ export const createBoardingApplication = async (req: TRequest, res: TResponse) =
         })
 
         await newBooking.save();
+
+
+        emitter.emit(EventName.ACTIVITY, {
+            user: req.user.id as any,
+            description: ActivityType.SERVICE_BOARDING_CREATED,
+        } as IActivity);
 
         return res.status(200).json(statuses["00"])
     } catch (error) {

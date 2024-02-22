@@ -7,6 +7,9 @@ import Booking from "../models/booking.model";
 import Pet from "../models/pet.schema";
 import { BookingServiceType, BookingStatus } from "../_core/enum/booking.enum";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
+import { EventName, ActivityType } from "../_core/enum/activity.enum";
+import { emitter } from "../_core/events/activity.event";
+import { IActivity } from "../_core/interfaces/activity.interface";
 
 export const createGroomingApplication = async (req: TRequest, res: TResponse) => {
     try {
@@ -41,6 +44,11 @@ export const createGroomingApplication = async (req: TRequest, res: TResponse) =
         })
 
         await newBooking.save();
+
+        emitter.emit(EventName.ACTIVITY, {
+            user: req.user.id as any,
+            description: ActivityType.SERVICE_GROOMING_CREATED,
+        } as IActivity);
 
         return res.status(201).json(statuses["00"]);
     } catch (error) {

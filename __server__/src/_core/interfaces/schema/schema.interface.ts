@@ -108,3 +108,13 @@ export interface IServiceFee extends Document {
   title: string;
   fee: Number;
 }
+
+export interface IServiceTransaction extends Document {
+  staff: Types.ObjectId;
+  customer: Types.ObjectId;
+  pet: Types.ObjectId;
+  service: Types.ObjectId;
+  date: Date;
+  feedback?: string;
+  payment: Number;
+ }

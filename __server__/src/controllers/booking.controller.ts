@@ -9,6 +9,10 @@ import { BookingStatus } from "../_core/enum/booking.enum";
 import { EventName } from "../_core/enum/activity.enum";
 import { emitter } from "../_core/events/activity.event";
 import { IActivity } from "../_core/interfaces/activity.interface";
+import serviceTransaction from "../models/service_transactions.schema";
+import ServiceTransaction from "../models/service_transactions.schema";
+import { findServiceFeeByTitle } from "../services/service_fee.service";
+import ServiceFee from "../models/service_fee.schema";
 
 export const getBookings = async (req: TRequest, res: TResponse) => {
     try {
@@ -74,15 +78,108 @@ export const updateBookingStatusById = async (req: TRequest, res: TResponse) => 
         }
 
         if (status == BookingStatus.Done) {
+            const service = await findServiceFeeByTitle(updatedBooking.applicationType);
+            const newServiceTransaction = new ServiceTransaction({
+                staff: req.user.id,
+                customer: updatedBooking.user,
+                pet: updatedBooking.pet,
+                payment: 0,
+                service: service?._id,
+                feedback: ""
+            });
+
+            await newServiceTransaction.save();
             emitter.emit(EventName.ACTIVITY, {
                 user: req.user.id as any,
                 description: `${updatedBooking.applicationType} completed`,
             } as IActivity);
         }
 
+        if (status == BookingStatus.Declined) {
+            emitter.emit(EventName.ACTIVITY, {
+                user: req.user.id as any,
+                description: `${updatedBooking.applicationType} declined`,
+            } as IActivity);
+        }
+
+        if (status == BookingStatus.Confirmed) {
+            emitter.emit(EventName.ACTIVITY, {
+                user: req.user.id as any,
+                description: `${updatedBooking.applicationType} confirmed`,
+            } as IActivity);
+        }
         return res.status(200).json(statuses["00"]);
     } catch (error) {
         console.log("@getBookings error", error)
         return res.status(500).json(statuses["0900"])
     }
 };
+
+
+export const getTransactions = async (req: TRequest, res: TResponse) => {
+    try {
+        const result = await ServiceTransaction.aggregate([
+            {
+                $lookup: {
+                    from: 'profiles', // Collection name for staff
+                    localField: 'staff',
+                    foreignField: 'user',
+                    as: 'staff'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$staff',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: 'profiles', // Collection name for customers
+                    localField: 'customer',
+                    foreignField: 'user',
+                    as: 'customer'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$customer',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: 'pets', // Collection name for pets
+                    localField: 'pet',
+                    foreignField: '_id',
+                    as: 'pet'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$pet',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $project: {
+                    'staff.createdAt': 0,
+                    'staff.updatedAt': 0,
+                    'staff.__v': 0,
+                    'customer.createdAt': 0,
+                    'customer.updatedAt': 0,
+                    'customer.__v': 0,
+                    'pet.createdAt': 0,
+                    'pet.updatedAt': 0,
+                    'pet.__v': 0,
+                    '__v': 0,
+                }
+            }
+        ]);
+
+        return res.status(200).json(result);
+    } catch (error) {
+        console.log("@getTransactions error", error)
+        return res.status(500).json(statuses["0900"])
+    }
+}

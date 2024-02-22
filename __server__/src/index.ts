@@ -16,6 +16,7 @@ import groomingApplicationRoute from './routes/grooming_application.route';
 import scheduleRoute from './routes/schedule.route';
 import boardingApplicationRoute from './routes/boarding_application.service';
 import bookingRoute from './routes/booking.route';
+import transitApplicationRoute from './routes/transit_application.route';
 
 import { requestLoggerMiddleware } from './_core/middlewares/request-logger.middleware';
 import { allowApiAccessMiddleware } from './_core/middlewares/allow-access.middleware';
@@ -46,6 +47,7 @@ async function runApp() {
   app.use('/api', scheduleRoute);
   app.use('/api', groomingApplicationRoute);
   app.use('/api', boardingApplicationRoute);
+  app.use('/api', transitApplicationRoute);
   app.use('/api', bookingRoute);
 
   connectDB();

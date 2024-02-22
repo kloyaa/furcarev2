@@ -5,3 +5,9 @@ export enum BookingStatus {
   Declined = 'declined',
   Done = 'done',
 }
+
+export enum BookingServiceType {
+  Grooming = 'grooming',
+  Boarding = 'boarding',
+  Transit = 'transit'
+}

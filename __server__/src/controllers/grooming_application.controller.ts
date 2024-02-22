@@ -5,7 +5,7 @@ import GroomingApplication from "../models/grooming_application.schema";
 import BookingSchedule from "../models/schedule.model";
 import Booking from "../models/booking.model";
 import Pet from "../models/pet.schema";
-import { BookingStatus } from "../_core/enum/booking.enum";
+import { BookingServiceType, BookingStatus } from "../_core/enum/booking.enum";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
 
 export const createGroomingApplication = async (req: TRequest, res: TResponse) => {
@@ -29,10 +29,11 @@ export const createGroomingApplication = async (req: TRequest, res: TResponse) =
 
         await newGroomingApplication.save();
 
-        const serviceFee = await findServiceFeeByTitle("grooming");
+        const serviceFee = await findServiceFeeByTitle(BookingServiceType.Grooming);
 
         const newBooking = new Booking({
             application: newGroomingApplication._id,
+            applicationType: BookingServiceType.Grooming,
             user: req.user.id,
             pet: petId,
             status: BookingStatus.Pending,
@@ -43,7 +44,7 @@ export const createGroomingApplication = async (req: TRequest, res: TResponse) =
 
         return res.status(201).json(statuses["00"]);
     } catch (error) {
-        console.error('Error creating grooming application:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.error('@createGroomingApplication', error);
+        return res.status(500).json(statuses["0900"]);
     }
 };

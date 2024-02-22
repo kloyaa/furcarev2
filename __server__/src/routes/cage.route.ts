@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { isAuthenticated } from '../_core/middlewares/jwt.middleware';
-import { getCages } from '../controllers/service_fee.controller';
+import { getCages  } from '../controllers/cage.controller';
 const router = Router();
 
 const commonMiddlewares = [

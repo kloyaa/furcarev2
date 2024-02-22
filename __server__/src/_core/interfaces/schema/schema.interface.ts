@@ -74,6 +74,7 @@ export interface IBooking extends Document {
   staff?: Types.ObjectId;
   pet: Types.ObjectId;
   application: Types.ObjectId;
+  applicationType: BookingStatus;
   status: BookingStatus;
   payable: Number;
 }

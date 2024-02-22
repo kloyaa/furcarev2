@@ -15,18 +15,6 @@ export const getServiceFees = async (req: TRequest, res: Response) => {
     }
 }
 
-export const getCages = async (req: TRequest, res: Response) => {
-    try {
-        const cages = await Cage.find();
-
-        return res.status(200).json(cages);
-    } catch (error) {
-        console.log('@getCages error', error);
-        return res.status(500).json(statuses['0900']);
-    }
-}
-
-
 export const updateServiceFeeById = async (req: TRequest, res: Response) => {
     const { _id } = req.params;
     const { fee, title } = req.body;

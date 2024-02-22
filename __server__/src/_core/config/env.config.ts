@@ -16,6 +16,9 @@ export const getEnv = async (): Promise<IEnvironmentVariables> => {
     NODEX_ACCESS_KEY: process.env.NODEX_ACCESS_KEY,
     NODEX_SECRET_KEY: process.env.NODEX_SECRET_KEY,
     NODEX_CRYPTO_KEY: process.env.NODEX_CRYPTO_KEY,
+    MAX_LIMIT_SMALL_CAGE: Number(process.env.MAX_LIMIT_SMALL_CAGE),
+    MAX_LIMIT_MEDIUM_CAGE: Number(process.env.MAX_LIMIT_MEDIUM_CAGE),
+    MAX_LIMIT_LARGE_CAGE: Number(process.env.MAX_LIMIT_LARGE_CAGE),
   };
 
   // Check if any property is undefined or null

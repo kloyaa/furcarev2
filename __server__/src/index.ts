@@ -14,6 +14,8 @@ import serviceRoute from './routes/service_fee.route';
 import cageRoute from './routes/cage.route';
 import groomingApplicationRoute from './routes/grooming_application.route';
 import scheduleRoute from './routes/schedule.route';
+import boardingApplicationRoute from './routes/boarding_application.service';
+import bookingRoute from './routes/booking.route';
 
 import { requestLoggerMiddleware } from './_core/middlewares/request-logger.middleware';
 import { allowApiAccessMiddleware } from './_core/middlewares/allow-access.middleware';
@@ -41,8 +43,10 @@ async function runApp() {
   app.use('/api', adminRoute);
   app.use('/api', serviceRoute);
   app.use('/api', cageRoute);
-  app.use('/api', groomingApplicationRoute);
   app.use('/api', scheduleRoute);
+  app.use('/api', groomingApplicationRoute);
+  app.use('/api', boardingApplicationRoute);
+  app.use('/api', bookingRoute);
 
   connectDB();
 

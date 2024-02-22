@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { IBooking } from '../_core/interfaces/schema/schema.interface';
-import { BookingStatus } from '../_core/enum/booking.enum';
+import { BookingServiceType, BookingStatus } from '../_core/enum/booking.enum';
 
 const bookingSchema = new Schema<IBooking>(
   {
@@ -16,6 +16,11 @@ const bookingSchema = new Schema<IBooking>(
     pet: {
       type: Schema.Types.ObjectId,
       ref: 'Pet',
+      required: true,
+    },
+    applicationType: {
+      type: String,
+      enum: Object.values(BookingServiceType),
       required: true,
     },
     application: {

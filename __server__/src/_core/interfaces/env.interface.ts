@@ -12,4 +12,7 @@ export interface IEnvironmentVariables {
   NODEX_ACCESS_KEY: string | undefined;
   NODEX_SECRET_KEY: string | undefined;
   NODEX_CRYPTO_KEY: string | undefined;
+  MAX_LIMIT_SMALL_CAGE: number | undefined;
+  MAX_LIMIT_MEDIUM_CAGE: number | undefined;
+  MAX_LIMIT_LARGE_CAGE: number | undefined;
 }

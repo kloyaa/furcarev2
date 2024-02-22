@@ -162,6 +162,20 @@ export const getTransactions = async (req: TRequest, res: TResponse) => {
                 }
             },
             {
+                $lookup: {
+                    from: 'servicefees', // Collection name for pets
+                    localField: 'service',
+                    foreignField: '_id',
+                    as: 'service'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$service',
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
                 $project: {
                     'staff.createdAt': 0,
                     'staff.updatedAt': 0,
@@ -169,10 +183,15 @@ export const getTransactions = async (req: TRequest, res: TResponse) => {
                     'customer.createdAt': 0,
                     'customer.updatedAt': 0,
                     'customer.__v': 0,
+                    'service.createdAt': 0,
+                    'service.updatedAt': 0,
+                    'service.__v': 0,
                     'pet.createdAt': 0,
                     'pet.updatedAt': 0,
                     'pet.__v': 0,
                     '__v': 0,
+                    'createdAt': 0,
+                    'updatedAt': 0,
                 }
             }
         ]);

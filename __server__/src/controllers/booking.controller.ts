@@ -66,7 +66,8 @@ export const updateBookingStatusById = async (req: TRequest, res: TResponse) => 
     }
     try {
         const { booking: bookingId, status } = req.body;
-        const updatedBooking = await Booking.findByIdAndUpdate(bookingId, { status }, { new: true });
+        const update = { status, staff: req.user.id };
+        const updatedBooking = await Booking.findByIdAndUpdate(bookingId, update, { new: true });
 
         if (!updatedBooking) {
             return res.status(404).json(statuses["02"]);
@@ -75,7 +76,7 @@ export const updateBookingStatusById = async (req: TRequest, res: TResponse) => 
         if (status == BookingStatus.Done) {
             emitter.emit(EventName.ACTIVITY, {
                 user: req.user.id as any,
-                description: updatedBooking.applicationType,
+                description: `${updatedBooking.applicationType} completed`,
             } as IActivity);
         }
 

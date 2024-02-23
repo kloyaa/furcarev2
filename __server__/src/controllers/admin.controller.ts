@@ -3,6 +3,10 @@ import { TRequest } from "../_core/interfaces/overrides.interface";
 import { type Response } from 'express';
 import User from "../models/user.model";
 import Activity from "../models/activity.model";
+import { statuses } from "../_core/const/api.statuses";
+import Profile from "../models/profile.model";
+import { findProfileByUser } from "../services/profile.service";
+import { validateUpdateUserActiveStatus } from "../_core/validators/user.validator";
 
 export const getCustomers = async (req: TRequest, res: Response) => {
     try {
@@ -96,7 +100,8 @@ export const getCustomers = async (req: TRequest, res: Response) => {
 
         return res.status(200).json(result);
     } catch (error) {
-        return null;
+        console.log('@getCustomers error', error);
+        return res.status(500).json(statuses['0900']);
     }
 }
 
@@ -166,7 +171,8 @@ export const getStaffs = async (req: TRequest, res: Response) => {
 
         return res.status(200).json(result);
     } catch (error) {
-        return null;
+        console.log('@getStaffs error', error);
+        return res.status(500).json(statuses['0900']);
     }
 }
 
@@ -221,7 +227,33 @@ export const getCheckInStats = async (req: TRequest, res: Response) => {
 
         return res.status(200).json(Object.entries(result).map(([month, count]) => ({ [month.toLowerCase()]: count })));
     } catch (error) {
-        console.error('@getCheckInStats error', error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        console.log('@getCheckInStats error', error);
+        return res.status(500).json(statuses['0900']);
     }
 };
+
+export const updateUserActiveStatus = async (req: TRequest, res: Response) => {
+    const error = validateUpdateUserActiveStatus(req.body);
+    if (error) {
+      return res.status(400).json({
+        ...statuses['501'],
+        message: error.details[0].message.replace(/['"]/g, ''),
+      });
+    }
+
+    try {
+        const { user: userId, isActive } = req.body;
+
+        const profile = await findProfileByUser(userId)
+        if(!profile) {
+            return res.status(404).json(statuses['0104']);
+        }
+
+        await Profile.updateOne({ user: profile?.user }, { isActive });
+
+        return res.status(200).json(statuses["00"]);
+    } catch (error) {
+        console.log('@getCheckInStats error', error);
+        return res.status(500).json(statuses['0900']);
+    }
+}

@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { passwordRegexp } from '../const/patterns.const';
+import { isObjectIdOrHexString } from 'mongoose';
 
 export const validateCreateProfile = (body: any) => {
   const schema = Joi.object({
@@ -64,3 +65,20 @@ export const validatorChangePassword = (body: any) => {
 
   return error;
 };
+
+export const validateUpdateUserActiveStatus = (body: any) => {
+  const { error } = Joi.object({
+    isActive: Joi.boolean().required(),
+    user: Joi
+        .string()
+        .custom((value, helpers) => {
+            if (!isObjectIdOrHexString(value)) {
+                return helpers.error('any.invalid');
+            }
+            return value;
+        })
+        .required(),
+}).validate(body);
+
+return error;
+}

@@ -15,6 +15,7 @@ import UserRole from '../models/user_role.schema';
 import { findRoleByUser } from '../services/role.service';
 import { TRequest } from '../_core/interfaces/overrides.interface';
 import { validatorChangePassword } from '../_core/validators/user.validator';
+import { isUserActive } from '../services/user.service';
 
 export const login = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -40,6 +41,11 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     const passwordMatched: boolean = await bcrypt.compare(password, user.password);
     if (!passwordMatched) {
       return res.status(401).json(statuses['0051']);
+    }
+
+    const isActive = await isUserActive(user._id);
+    if(!isActive) {
+      return res.status(401).json(statuses['0058']);
     }
 
     emitter.emit(EventName.ACTIVITY, {
@@ -160,6 +166,7 @@ export const changeUserPassword = async (req: TRequest, res: Response) => {
       message: error.details[0].message.replace(/['"]/g, ''),
     });
   }
+
   try {
     const { currentPassword, newPassword } = req.body;
     const user = await User.findById(req.user.id);

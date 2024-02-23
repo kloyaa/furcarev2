@@ -4,7 +4,7 @@ import { isAuthenticated } from '../_core/middlewares/jwt.middleware';
 const router = Router();
 
 const commonMiddlewares = [
-    isAuthenticated
+    isAuthenticated,
 ];
 
 router.post('/auth/v1/login', login as any);

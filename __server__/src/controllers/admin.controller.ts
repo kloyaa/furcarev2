@@ -1,5 +1,5 @@
 import { Aggregate } from "mongoose";
-import { TRequest } from "../_core/interfaces/overrides.interface";
+import { TRequest, TResponse } from "../_core/interfaces/overrides.interface";
 import { type Response } from 'express';
 import User from "../models/user.model";
 import Activity from "../models/activity.model";
@@ -7,6 +7,9 @@ import { statuses } from "../_core/const/api.statuses";
 import Profile from "../models/profile.model";
 import { findProfileByUser } from "../services/profile.service";
 import { validateUpdateUserActiveStatus } from "../_core/validators/user.validator";
+import BoardingApplication from "../models/boarding_application.schema";
+import TransitApplication from "../models/transit_application.schema";
+import GroomingApplication from "../models/grooming_application.schema";
 
 export const getCustomers = async (req: TRequest, res: Response) => {
     try {
@@ -105,7 +108,7 @@ export const getCustomers = async (req: TRequest, res: Response) => {
     }
 }
 
-export const getStaffs = async (req: TRequest, res: Response) => {
+export const getStaffs = async (req: TRequest, res: TResponse) => {
     try {
         const getCustomerDataAggregate: Aggregate<any[]> = User.aggregate([
             {
@@ -176,14 +179,14 @@ export const getStaffs = async (req: TRequest, res: Response) => {
     }
 }
 
-export const getCheckInStats = async (req: TRequest, res: Response) => {
+export const getCheckInStats = async (req: TRequest, res: TResponse) => {
     try {
         const currentYear = new Date().getFullYear();
 
         const checkInStats = await Activity.aggregate([
             {
                 $match: {
-                    description: 'Login success',
+                    description: 'Logged in successfully',
                     createdAt: {
                         $gte: new Date(`${currentYear}-01-01`), // Start of the current year
                         $lte: new Date(`${currentYear}-12-31`)  // End of the current year
@@ -232,20 +235,66 @@ export const getCheckInStats = async (req: TRequest, res: Response) => {
     }
 };
 
+export const getSeriveUsageStats = async (req: TRequest, res: TResponse) => {
+    try {
+        const currentYear = new Date().getFullYear();
+        const startDate = new Date(currentYear, 0, 1);
+        const endDate = new Date(currentYear, 11, 31);
+
+        const getAggregateResult = async (model: any) => {
+            return await model.aggregate([
+                {
+                    $match: {
+                        schedule: {
+                            $gte: startDate,
+                            $lte: endDate
+                        }
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        total: { $sum: 1 }
+                    }
+                }
+            ]);
+        };
+
+        const [boardingStats, transitStats, groomingStats] = await Promise.all([
+            getAggregateResult(BoardingApplication),
+            getAggregateResult(TransitApplication),
+            getAggregateResult(GroomingApplication)
+        ]);
+
+        const formatResult = (stats: any[]) => {
+            return stats.length > 0 ? stats[0].total : 0;
+        };
+
+        return res.status(200).json([
+            { grooming: formatResult(groomingStats) },
+            { transit: formatResult(transitStats) },
+            { boarding: formatResult(boardingStats) }
+        ]);
+    } catch (error) {
+        console.error('@getSeriveUsageStats error', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 export const updateUserActiveStatus = async (req: TRequest, res: Response) => {
     const error = validateUpdateUserActiveStatus(req.body);
     if (error) {
-      return res.status(400).json({
-        ...statuses['501'],
-        message: error.details[0].message.replace(/['"]/g, ''),
-      });
+        return res.status(400).json({
+            ...statuses['501'],
+            message: error.details[0].message.replace(/['"]/g, ''),
+        });
     }
 
     try {
         const { user: userId, isActive } = req.body;
 
         const profile = await findProfileByUser(userId)
-        if(!profile) {
+        if (!profile) {
             return res.status(404).json(statuses['0104']);
         }
 

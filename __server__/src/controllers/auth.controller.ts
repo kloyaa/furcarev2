@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { type Request, type Response } from 'express';
 import { statuses } from '../_core/const/api.statuses';
-import { validateLogin, validateRegister } from '../_core/validators/auth.validator';
+import { validateEkyc, validateLogin, validateRegister } from '../_core/validators/auth.validator';
 import { emitter } from '../_core/events/activity.event';
 import { ActivityType, EventName } from '../_core/enum/activity.enum';
 import { IActivity } from '../_core/interfaces/activity.interface';
@@ -16,6 +16,8 @@ import { findRoleByUser } from '../services/role.service';
 import { TRequest } from '../_core/interfaces/overrides.interface';
 import { validatorChangePassword } from '../_core/validators/user.validator';
 import { isUserActive } from '../services/user.service';
+import { IUserRegistration } from '../_core/interfaces/auth.interface';
+import Profile from '../models/profile.schema';
 
 export const login = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -203,3 +205,87 @@ export const changeUserPassword = async (req: TRequest, res: Response) => {
     return res.status(500).json(statuses['0900']);
   }
 }
+
+export const ekyc = async (req: TRequest, res: Response): Promise<any> => {
+  const error = validateEkyc(req.body);
+  if (error) {
+    return res.status(403).json({
+      ...statuses['501'],
+      message: error.details[0].message.replace(/['"]/g, ''),
+    });
+  }
+
+  try {
+    const {
+      account: {
+        username,
+        email,
+        password
+      },
+      profile: {
+        firstName,
+        lastName,
+        address,
+        contact,
+        gender,
+        birthdate
+      }
+    } = req.body as IUserRegistration;
+
+
+    const existingUser = await User.findOne().or([{ username }, { email }]).exec();
+    if (existingUser) {
+      return res.status(403).json(statuses['0052']);
+    }
+
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword,
+      salt,
+      origin: req.from
+    });
+
+    const createdUser = await newUser.save();
+
+    const newProfile = new Profile({
+      user: newUser._id,
+      firstName,
+      lastName,
+      birthdate,
+      address,
+      contact,
+      gender,
+    });
+
+    await newProfile.save();
+
+    const assignedRole = await UserRole.findOne({ user: createdUser.id });
+
+    if (!assignedRole) {
+      const staffRoleName = await RoleName.findOne({ name: 'Staff' });
+
+      const newUserRole = new UserRole({
+        user: createdUser.id,
+        role: staffRoleName!._id
+      });
+
+      await newUserRole.save();
+    }
+
+    emitter.emit(EventName.ACTIVITY, {
+      user: createdUser.id,
+      description: ActivityType.EKYC_SUCCESS,
+    } as IActivity);
+
+    return res.status(201).json(statuses['00']);
+  } catch (error) {
+    console.log('@register error', error);
+    return res.status(500).json(statuses['0900']);
+  }
+};

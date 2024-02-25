@@ -8,7 +8,7 @@ import { IActivity } from '../_core/interfaces/activity.interface';
 import { generateJwt } from '../_core/utils/jwt/jwt.util';
 import { getEnv } from '../_core/config/env.config';
 
-import User from '../models/user.model';
+import User from '../models/user.schema';
 import { encrypt } from '../_core/utils/security/encryption.util';
 import RoleName from '../models/role_name.schema';
 import UserRole from '../models/user_role.schema';
@@ -44,7 +44,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     }
 
     const isActive = await isUserActive(user._id);
-    if(!isActive) {
+    if (!isActive) {
       return res.status(401).json(statuses['0058']);
     }
 
@@ -54,7 +54,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     } as IActivity);
 
     const userRole = await findRoleByUser(user.id);
-    if(!userRole) {
+    if (!userRole) {
       return res.status(403).json(statuses['0071']);
     }
 
@@ -141,7 +141,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     }
 
     const userRole = await findRoleByUser(createdUser.id);
-    if(!userRole) {
+    if (!userRole) {
       return res.status(403).json(statuses['0071']);
     }
 

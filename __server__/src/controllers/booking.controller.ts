@@ -2,7 +2,7 @@ import { isObjectIdOrHexString } from "mongoose";
 import { statuses } from "../_core/const/api.statuses";
 import { TRequest, TResponse } from "../_core/interfaces/overrides.interface";
 import BoardingApplication from "../models/boarding_application.schema";
-import Booking from "../models/booking.model";
+import Booking from "../models/booking.schema";
 import GroomingApplication from "../models/grooming_application.schema";
 import { validateUpdateBookingStatusById } from "../_core/validators/application.validator";
 import { BookingStatus } from "../_core/enum/booking.enum";

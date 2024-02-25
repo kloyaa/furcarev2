@@ -1,7 +1,7 @@
 import { TRequest, TResponse } from "../_core/interfaces/overrides.interface";
-import Booking from "../models/booking.model";
+import Booking from "../models/booking.schema";
 import GroomingApplication from "../models/grooming_application.schema";
-import BookingSchedule from "../models/schedule.model";
+import BookingSchedule from "../models/schedule.schema";
 
 export const getSchedules = async (req: TRequest, res: TResponse) => {
     try {

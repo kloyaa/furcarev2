@@ -6,7 +6,7 @@ import { validatorSavePetOwner, validatorUpdatePetOwner } from '../_core/validat
 import { ActivityType, EventName } from '../_core/enum/activity.enum';
 import { IActivity } from '../_core/interfaces/activity.interface';
 
-import PetOwner from '../models/pet_owner.model';
+import PetOwner from '../models/pet_owner.schema';
 import { findProfileByUser } from '../services/profile.service';
 import { findPetOwnerByUser } from '../services/pet_owner.service';
 

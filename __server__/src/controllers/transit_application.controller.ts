@@ -6,7 +6,7 @@ import Pet from "../models/pet.schema";
 import TransitApplication from "../models/transit_application.schema";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
 import { BookingServiceType, BookingStatus } from "../_core/enum/booking.enum";
-import Booking from "../models/booking.model";
+import Booking from "../models/booking.schema";
 import { EventName, ActivityType } from "../_core/enum/activity.enum";
 import { emitter } from "../_core/events/activity.event";
 import { IActivity } from "../_core/interfaces/activity.interface";

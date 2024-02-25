@@ -1,10 +1,10 @@
-import Profile from "../models/profile.model";
+import Profile from "../models/profile.schema";
 import { IProfile } from "../_core/interfaces/schema/schema.interface";
 
 export const findProfileByUser = async (user: string): Promise<IProfile | null> => {
     try {
         const profile = await Profile.findOne({ user });
-        if(!profile) {
+        if (!profile) {
             return null;
         }
 

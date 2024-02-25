@@ -1,10 +1,10 @@
 import { Aggregate } from "mongoose";
 import { TRequest, TResponse } from "../_core/interfaces/overrides.interface";
 import { type Response } from 'express';
-import User from "../models/user.model";
-import Activity from "../models/activity.model";
+import User from "../models/user.schema";
+import Activity from "../models/activity.schema";
 import { statuses } from "../_core/const/api.statuses";
-import Profile from "../models/profile.model";
+import Profile from "../models/profile.schema";
 import { findProfileByUser } from "../services/profile.service";
 import { validateUpdateUserActiveStatus } from "../_core/validators/user.validator";
 import BoardingApplication from "../models/boarding_application.schema";

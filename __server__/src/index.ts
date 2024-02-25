@@ -14,7 +14,7 @@ import serviceRoute from './routes/service_fee.route';
 import cageRoute from './routes/cage.route';
 import groomingApplicationRoute from './routes/grooming_application.route';
 import scheduleRoute from './routes/schedule.route';
-import boardingApplicationRoute from './routes/boarding_application.service';
+import boardingApplicationRoute from './routes/boarding_application.route';
 import bookingRoute from './routes/booking.route';
 import transitApplicationRoute from './routes/transit_application.route';
 

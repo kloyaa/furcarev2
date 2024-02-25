@@ -5,7 +5,7 @@ import Pet from "../models/pet.schema";
 import BoardingApplication from "../models/boarding_application.schema";
 import { validateCreateBoardingApplication } from "../_core/validators/application.validator";
 import { BookingServiceType, BookingStatus } from "../_core/enum/booking.enum";
-import Booking from "../models/booking.model";
+import Booking from "../models/booking.schema";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
 import { emitter } from "../_core/events/activity.event";
 import { ActivityType, EventName } from "../_core/enum/activity.enum";

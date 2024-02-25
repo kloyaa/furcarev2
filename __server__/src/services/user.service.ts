@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import Profile from "../models/profile.model";
+import Profile from "../models/profile.schema";
 
 export const isUserActive = async (user: Types.ObjectId) => {
     try {

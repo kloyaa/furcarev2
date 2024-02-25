@@ -1,7 +1,7 @@
 import EventEmitter from 'eventemitter3';
 import { EventName } from '../enum/activity.enum';
 import { IActivity } from '../interfaces/activity.interface';
-import Activity from '../../models/activity.model';
+import Activity from '../../models/activity.schema';
 import RequestLog from '../../models/request_log.schema';
 import { IRequestLog } from '../interfaces/schema/schema.interface';
 

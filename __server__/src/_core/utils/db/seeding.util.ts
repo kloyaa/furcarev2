@@ -1,11 +1,11 @@
 require('dotenv').config();
 import bcrypt from 'bcrypt';
-import User from '../../../models/user.model';
+import User from '../../../models/user.schema';
 import { seedAdminAccounts, seedRoleNames, seedStaffAccounts, seedUserAccounts } from '../../const/accounts.const';
 import { closeDB, connectDB } from './db.util';
 import RoleName from '../../../models/role_name.schema';
 import UserRole from '../../../models/user_role.schema';
-import BookingSchedule from '../../../models/schedule.model';
+import BookingSchedule from '../../../models/schedule.schema';
 import { seedCageSizes, seedSchedules, seedServiceFees } from '../../const/booking_seed_data.const';
 import Cage from '../../../models/cage.schema';
 import ServiceFee from '../../../models/service_fee.schema';
@@ -60,7 +60,7 @@ const registerAccounts = async (): Promise<any> => {
       }),
     );
 
-    const [users, staffs, admins ] = await Promise.all([
+    const [users, staffs, admins] = await Promise.all([
       User.insertMany(userAccounts),
       User.insertMany(staffAccounts),
       User.insertMany(adminAccounts)

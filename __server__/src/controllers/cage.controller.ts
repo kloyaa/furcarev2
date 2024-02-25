@@ -1,7 +1,7 @@
 import { getEnv } from "../_core/config/env.config";
 import { statuses } from "../_core/const/api.statuses";
 import { TRequest, TResponse } from "../_core/interfaces/overrides.interface";
-import Booking from "../models/booking.model";
+import Booking from "../models/booking.schema";
 import Cage from "../models/cage.schema";
 import { findCageLimitByTitle } from "../services/cage.service";
 

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:furcarev2/consts/colors.dart';
+import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heroicons/heroicons.dart';
+import 'package:ionicons/ionicons.dart';
 
 class ScreenAdminLogin extends StatefulWidget {
   const ScreenAdminLogin({super.key});
@@ -14,6 +15,10 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
   // State
   bool _isPasswordVisible = false;
 
+  Future<void> _handleLogin() async {
+    showSnackBar(context, "Hello!");
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -23,20 +28,29 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
         backgroundColor: AppColors.secondary,
         body: Center(
           child: SizedBox(
-            width: 250,
+            width: 250.0,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Furcare",
-                  style: GoogleFonts.urbanist(
+                  "furcare",
+                  style: GoogleFonts.sunshiney(
                     color: AppColors.primary,
-                    fontSize: 16.0,
+                    fontSize: 90.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20.0),
+                Text(
+                  '"fur every pet needs"',
+                  style: GoogleFonts.sunshiney(
+                    color: AppColors.primary,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w300,
+                    height: 0.1,
+                  ),
+                ),
+                const SizedBox(height: 100.0),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -52,7 +66,11 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                         color: AppColors.primary.withOpacity(0.5),
                         fontSize: 10.0,
                       ),
-                      prefixIcon: const HeroIcon(HeroIcons.user),
+                      prefixIcon: const Icon(
+                        Ionicons.person_outline,
+                        size: 18.0,
+                        color: AppColors.primary,
+                      ),
                       prefixIconColor: AppColors.primary,
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -82,7 +100,11 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                         color: AppColors.primary.withOpacity(0.5),
                         fontSize: 10.0,
                       ),
-                      prefixIcon: const HeroIcon(HeroIcons.lockClosed),
+                      prefixIcon: const Icon(
+                        Ionicons.lock_closed_outline,
+                        size: 18.0,
+                        color: AppColors.primary,
+                      ),
                       prefixIconColor: AppColors.primary,
                       border: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -93,10 +115,11 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                             _isPasswordVisible = !_isPasswordVisible;
                           });
                         },
-                        child: HeroIcon(
+                        child: Icon(
                           _isPasswordVisible
-                              ? HeroIcons.eye
-                              : HeroIcons.eyeSlash,
+                              ? Ionicons.eye_outline
+                              : Ionicons.eye_off_outline,
+                          size: 18.0,
                           color: AppColors.primary,
                         ),
                       ),
@@ -108,7 +131,20 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                 const SizedBox(height: 50.0),
                 ElevatedButton(
                   onPressed: () async {
-                    // await login(context);
+                    await _handleLogin();
+
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (BuildContext context) {
+                    //     return PopConfirm(
+                    //       content: "ff",
+                    //       onOk: () async {
+                    //         print("CLICKED!");
+                    //       },
+                    //       title: "g",
+                    //     );
+                    //   },
+                    // );
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,

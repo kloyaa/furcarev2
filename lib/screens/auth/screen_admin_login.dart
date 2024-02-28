@@ -1,6 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furcarev2/consts/colors.dart';
-import 'package:furcarev2/widgets/snackbar.dart';
+import 'package:furcarev2/endpoints/auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -19,13 +20,50 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
 
   // State
   bool _isPasswordVisible = false;
+  bool _isLoginError = false;
+  String _loginErrorMessage = "";
 
   Future<void> _handleLogin() async {
-    showSnackBar(
-      context,
-      "Hello!",
-      color: AppColors.danger,
-    );
+    final authenticationApi = AuthenticationApi("web");
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (username.isEmpty) {
+      _usernameFocus.requestFocus();
+    }
+    if (password.isEmpty) {
+      _passwordFocus.requestFocus();
+    }
+
+    try {
+      Response response = await authenticationApi.login(
+        username: username,
+        password: password,
+      );
+
+      if (response.data["role"].toString().toLowerCase() != "administrator") {
+        setState(() {
+          _isLoginError = true;
+          _loginErrorMessage = "Please use the Furcare mobile app, Thank you.";
+        });
+      }
+
+      setState(() {
+        _isLoginError = false;
+        _loginErrorMessage = "";
+      });
+
+      if (context.mounted) {
+        Navigator.pushNamed(context, '/a/management/staff');
+      }
+
+      print(response.data);
+    } on DioException catch (e) {
+      setState(() {
+        _isLoginError = true;
+        _loginErrorMessage = e.response!.data["message"];
+      });
+    }
   }
 
   @override
@@ -33,7 +71,7 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
     _usernameFocus = FocusNode();
     _passwordFocus = FocusNode();
 
-    _usernameController.text = "Kolya0001";
+    _usernameController.text = "ErenJaeger_";
     _passwordController.text = "Password@123";
     super.initState();
   }
@@ -66,7 +104,9 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                       Text(
                         "furcare",
                         style: GoogleFonts.sunshiney(
-                          color: AppColors.secondary,
+                          color: _isLoginError
+                              ? AppColors.danger
+                              : AppColors.secondary,
                           fontSize: 120.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -74,7 +114,9 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                       Text(
                         '"fur every pet needs"',
                         style: GoogleFonts.sunshiney(
-                          color: AppColors.secondary,
+                          color: _isLoginError
+                              ? AppColors.danger
+                              : AppColors.secondary,
                           fontSize: 24.0,
                           fontWeight: FontWeight.w300,
                           height: 0.1,
@@ -113,13 +155,17 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                             fillColor: AppColors.primary,
                             labelText: "Username or Email",
                             labelStyle: GoogleFonts.urbanist(
-                              color: AppColors.primary.withOpacity(0.5),
+                              color: _isLoginError
+                                  ? AppColors.danger
+                                  : AppColors.primary.withOpacity(0.5),
                               fontSize: 10.0,
                             ),
-                            prefixIcon: const Icon(
+                            prefixIcon: Icon(
                               Ionicons.person_outline,
                               size: 18.0,
-                              color: AppColors.primary,
+                              color: _isLoginError
+                                  ? AppColors.danger
+                                  : AppColors.primary,
                             ),
                             prefixIconColor: AppColors.primary,
                             border: InputBorder.none,
@@ -128,8 +174,10 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                             floatingLabelAlignment:
                                 FloatingLabelAlignment.start,
                           ),
-                          style: const TextStyle(
-                            color: AppColors.primary,
+                          style: TextStyle(
+                            color: _isLoginError
+                                ? AppColors.danger
+                                : AppColors.primary,
                             fontSize: 12.0,
                           ),
                         ),
@@ -148,13 +196,17 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                             fillColor: Colors.white,
                             labelText: "Password",
                             labelStyle: GoogleFonts.urbanist(
-                              color: AppColors.primary.withOpacity(0.5),
+                              color: _isLoginError
+                                  ? AppColors.danger
+                                  : AppColors.primary.withOpacity(0.5),
                               fontSize: 10.0,
                             ),
-                            prefixIcon: const Icon(
+                            prefixIcon: Icon(
                               Ionicons.lock_closed_outline,
                               size: 18.0,
-                              color: AppColors.primary,
+                              color: _isLoginError
+                                  ? AppColors.danger
+                                  : AppColors.primary,
                             ),
                             prefixIconColor: AppColors.primary,
                             border: InputBorder.none,
@@ -171,15 +223,36 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
                                     ? Ionicons.eye_outline
                                     : Ionicons.eye_off_outline,
                                 size: 18.0,
-                                color: AppColors.primary,
+                                color: _isLoginError
+                                    ? AppColors.danger
+                                    : AppColors.primary,
                               ),
                             ),
                           ),
-                          style: const TextStyle(
-                              color: AppColors.primary, fontSize: 12.0),
+                          style: TextStyle(
+                            color: _isLoginError
+                                ? AppColors.danger
+                                : AppColors.primary,
+                            fontSize: 12.0,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10.0),
+                      _loginErrorMessage.isNotEmpty
+                          ? Column(
+                              children: [
+                                Text(
+                                  _loginErrorMessage,
+                                  style: GoogleFonts.urbanist(
+                                    color: AppColors.danger,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const SizedBox(height: 10.0),
+                              ],
+                            )
+                          : const SizedBox(),
                       Text(
                         "By logging in, you agree to abide by our terms and conditions. Please review them carefully before proceeding.",
                         style: GoogleFonts.urbanist(

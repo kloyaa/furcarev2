@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:furcarev2/screens/admin/screen_staff_management.dart';
 import 'package:furcarev2/screens/auth/screen_admin_login.dart';
 
 void main() {
@@ -17,7 +18,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ScreenAdminLogin(),
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const ScreenAdminLogin(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/a/management/staff': (context) => const AdminStaffManagement(),
+      },
     );
   }
 }

@@ -2,8 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/auth.dart';
+import 'package:furcarev2/providers/authentication.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 
 class ScreenAdminLogin extends StatefulWidget {
   const ScreenAdminLogin({super.key});
@@ -54,10 +56,17 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
       });
 
       if (context.mounted) {
-        Navigator.pushReplacementNamed(context, '/a/management/staff');
+        Navigator.pushReplacementNamed(context, '/a/profile');
       }
 
-      print(response.data);
+      if (context.mounted) {
+        final accessTokenProvider = Provider.of<AuthTokenProvider>(
+          context,
+          listen: false,
+        );
+
+        accessTokenProvider.setAuthToken(response.data['data']);
+      }
     } on DioException catch (e) {
       setState(() {
         _isLoginError = true;

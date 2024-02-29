@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { isObjectIdOrHexString } from "mongoose";
-import { BookingStatus } from "../enum/booking.enum";
+import { BookingStatus, UploadContentScope, UploadContentType } from "../enum/booking.enum";
 
 export const validateCreateBoardingApplication = (body: any) => {
     const { error } = Joi.object({
@@ -47,7 +47,7 @@ export const validateCreateTransitApplication = (body: any) => {
 };
 
 
-export const validateUpdateBookingStatusById= (body: any) => {
+export const validateUpdateBookingStatusById = (body: any) => {
     const { error } = Joi.object({
         status: Joi.string().valid(
             BookingStatus.Cancel,
@@ -65,6 +65,21 @@ export const validateUpdateBookingStatusById= (body: any) => {
                 return value;
             })
             .required(),
+    }).validate(body);
+
+    return error;
+};
+
+export const validateUploadImages  = (body: any) => {
+    const { error } = Joi.object({
+        uploadContentScope: Joi.string().valid(
+            UploadContentScope.Avatar,
+            UploadContentScope.QRCode,
+        ).required(),
+        uploadContentType: Joi.string().valid(
+            UploadContentType.Image,
+            UploadContentType.Video,
+        ).required(),
     }).validate(body);
 
     return error;

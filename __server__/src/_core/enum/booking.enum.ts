@@ -11,3 +11,13 @@ export enum BookingServiceType {
   Boarding = 'boarding',
   Transit = 'transit'
 }
+
+export enum UploadContentType {
+  Video = 'video',
+  Image = 'image',
+}
+
+export enum UploadContentScope {
+  Avatar = 'avatar',
+  QRCode = 'qrcode',
+}

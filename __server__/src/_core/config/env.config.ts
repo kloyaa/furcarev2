@@ -19,6 +19,9 @@ export const getEnv = async (): Promise<IEnvironmentVariables> => {
     MAX_LIMIT_SMALL_CAGE: Number(process.env.MAX_LIMIT_SMALL_CAGE),
     MAX_LIMIT_MEDIUM_CAGE: Number(process.env.MAX_LIMIT_MEDIUM_CAGE),
     MAX_LIMIT_LARGE_CAGE: Number(process.env.MAX_LIMIT_LARGE_CAGE),
+    CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+    CLOUDINARY_KEY: process.env.CLOUDINARY_KEY,
+    CLOUDINARY_SECRET: process.env.CLOUDINARY_SECRET,
   };
 
   // Check if any property is undefined or null

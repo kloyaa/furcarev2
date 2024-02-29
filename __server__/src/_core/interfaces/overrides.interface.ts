@@ -1,4 +1,4 @@
-import { Request } from 'express-jwt';
+import { Request } from 'express';
 import { IProfile } from './schema/schema.interface';
 import { type Response } from 'express';
 
@@ -9,6 +9,7 @@ export type TRequest = Request & {
   };
   profile: IProfile;
   from: string;
+  files: any;
 };
 
 export type TResponse = Response;

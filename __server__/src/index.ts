@@ -17,9 +17,13 @@ import scheduleRoute from './routes/schedule.route';
 import boardingApplicationRoute from './routes/boarding_application.route';
 import bookingRoute from './routes/booking.route';
 import transitApplicationRoute from './routes/transit_application.route';
+import uploadRoute from './routes/upload.route';
+import cookieParser from 'cookie-parser';
+import multer from "multer";
 
 import { requestLoggerMiddleware } from './_core/middlewares/request-logger.middleware';
 import { allowApiAccessMiddleware } from './_core/middlewares/allow-access.middleware';
+import { fileFilter, storage } from './services/upload/image_upload.service';
 
 const app: Application = express();
 
@@ -33,9 +37,12 @@ async function runApp() {
   );
   app.use(express.json());
 
+  app.use(cookieParser());
   app.use(allowApiAccessMiddleware);
   app.use(maintenanceModeMiddleware);
   app.use(requestLoggerMiddleware);
+  app.use(multer({ storage, fileFilter }).array("media"));
+
 
   app.use('/api', authRoute);
   app.use('/api', userRoute);
@@ -49,6 +56,7 @@ async function runApp() {
   app.use('/api', boardingApplicationRoute);
   app.use('/api', transitApplicationRoute);
   app.use('/api', bookingRoute);
+  app.use('/api', uploadRoute);
 
   connectDB();
 

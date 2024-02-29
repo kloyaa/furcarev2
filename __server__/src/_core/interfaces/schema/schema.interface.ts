@@ -1,5 +1,6 @@
 import { Types } from 'mongoose';
-import { BookingServiceType, BookingStatus } from '../../enum/booking.enum';
+import { BookingServiceType, BookingStatus, UploadContentScope, UploadContentType } from '../../enum/booking.enum';
+import { ICloudinaryImage } from '../cloudinary.interface';
 
 export interface IUser extends Document {
   username: string;
@@ -94,6 +95,13 @@ export interface IBoardingApplication extends Document {
 
 export interface ITransitApplication extends Document {
   schedule: Date;
+}
+
+export interface IUpload extends Document {
+  user: Types.ObjectId;
+  uploadData: ICloudinaryImage;
+  uploadContentScope: UploadContentScope;
+  uploadContentType: UploadContentType;
 }
 
 export interface IBookingSchedule extends Document {

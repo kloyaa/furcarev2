@@ -9,6 +9,8 @@ import BookingSchedule from '../../../models/schedule.schema';
 import { seedCageSizes, seedSchedules, seedServiceFees } from '../../const/booking_seed_data.const';
 import Cage from '../../../models/cage.schema';
 import ServiceFee from '../../../models/service_fee.schema';
+import Profile from '../../../models/profile.schema';
+import { faker } from '@faker-js/faker';
 
 const registerAccounts = async (): Promise<any> => {
   try {
@@ -66,7 +68,29 @@ const registerAccounts = async (): Promise<any> => {
       User.insertMany(adminAccounts)
     ])
 
+    const adminCreatedAccounts = admins.map((el) => {
+      const firstName = faker.person.firstName('male');
+      const lastName = faker.person.lastName('male');
+      const present = faker.location.streetAddress({ useFullAddress: true });
+      const permanent =  faker.location.streetAddress({ useFullAddress: true });
+      const birthdate = faker.date.birthdate({ min: 18, max: 23, mode: 'age' }).toISOString().substring(0, 10);
+      const email = faker.internet.email({ firstName, lastName });
+      const number = `09277${faker.string.numeric(6)}`;
+      return {
+        "user": el._id,
+        firstName,
+        lastName,
+        birthdate,
+        "address": { present, permanent },
+        "contact": { email, number },
+        "gender": "male",
+        isActive: true
+    }
+    });
+
     await createRoles({ staffs, users, admins });
+
+    await Profile.insertMany(adminCreatedAccounts);
 
     return true;
   } catch (error) {

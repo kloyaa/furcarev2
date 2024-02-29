@@ -54,7 +54,7 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
       });
 
       if (context.mounted) {
-        Navigator.pushNamed(context, '/a/management/staff');
+        Navigator.pushReplacementNamed(context, '/a/management/staff');
       }
 
       print(response.data);

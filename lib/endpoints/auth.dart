@@ -29,6 +29,26 @@ class AuthenticationApi {
       rethrow;
     }
   }
+
+  Future<Response> register({
+    required String email,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      Response response = await dio.post(
+        '/auth/v1/register',
+        data: {
+          "email": email,
+          "username": username,
+          "password": password,
+        },
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
 }
 
 class EnrollmentApi {

@@ -18,6 +18,7 @@ import { validatorChangePassword } from '../_core/validators/user.validator';
 import { isUserActive } from '../services/user.service';
 import { IUserRegistration } from '../_core/interfaces/auth.interface';
 import Profile from '../models/profile.schema';
+import { findProfileByUser } from '../services/profile.service';
 
 export const login = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -50,6 +51,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       return res.status(401).json(statuses['0058']);
     }
 
+    const isProfileCreated = await findProfileByUser(user._id);
+
+
     emitter.emit(EventName.ACTIVITY, {
       user: user.id,
       description: ActivityType.LOGIN,
@@ -64,6 +68,14 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     const payload = { origin: req.headers['nodex-user-origin'], id: user.id };
 
     const encryptedPayload = encrypt(payload, env.NODEX_CRYPTO_KEY ?? '123_cryptoKey');
+
+    if (!isProfileCreated) {
+      return res.status(401).json({
+        ...statuses['0104'],
+        role: userRole,
+        data: await generateJwt(encryptedPayload, env.JWT_SECRET_KEY || '123_secretKey'),
+      });
+    }
 
     return res.status(200).json({
       ...statuses['00'],

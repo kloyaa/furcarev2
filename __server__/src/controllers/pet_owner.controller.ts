@@ -28,7 +28,7 @@ export const savePetOwner = async (req: TRequest, res: Response) => {
             return res.status(404).json(statuses['04']);
         }
 
-        const profile = await findProfileByUser(userId);
+        const profile = await findProfileByUser(userId as any);
         if (!profile) {
             return res.status(404).json(statuses['0104']);
         }

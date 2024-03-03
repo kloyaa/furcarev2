@@ -17,7 +17,7 @@ export const createProfile = async (req: TRequest, res: Response) => {
   }
 
   try {
-    const { firstName, lastName, birthdate, address, contact, gender } = req.body;
+    const { firstName, lastName, birthdate, address, contact, gender, isActive } = req.body;
     const profile = await Profile.findOne({ user: req.user.id });
     if (profile) {
       return res.status(400).json(statuses['0103']);
@@ -31,6 +31,7 @@ export const createProfile = async (req: TRequest, res: Response) => {
       address,
       contact,
       gender,
+      isActive
     });
 
     const savedProfile = await newProfile.save();

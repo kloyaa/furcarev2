@@ -42,7 +42,8 @@ dependencies:
   ionicons: ^0.2.2
   shared_preferences: ^2.2.2
   provider: ^6.1.1
-
+  calendar_date_picker2: ^0.5.5
+  salomon_bottom_bar: ^3.3.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -69,6 +70,11 @@ flutter:
   assets:
     - assets/avatar_female.png
     - assets/avatar_male.png
+    - assets/success.gif
+    - assets/img_1.jpg
+    - assets/img_2.jpg
+    - assets/img_3.jpg
+    - assets/img_4.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

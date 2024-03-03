@@ -48,6 +48,8 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
           _isLoginError = true;
           _loginErrorMessage = "Please use the Furcare mobile app, Thank you.";
         });
+
+        return;
       }
 
       setState(() {

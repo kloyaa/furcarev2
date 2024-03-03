@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:furcarev2/providers/authentication.dart';
+import 'package:furcarev2/providers/registration.dart';
 import 'package:furcarev2/screens/admin/screen_profile.dart';
 import 'package:furcarev2/screens/admin/screen_staff_management.dart';
-import 'package:furcarev2/screens/auth/screen_admin_login.dart';
+import 'package:furcarev2/screens/auth/login/screen_customer_login.dart';
+import 'package:furcarev2/screens/auth/register/screen_customer_registration.dart';
+import 'package:furcarev2/screens/customer/screen_create_profile_2.dart';
+import 'package:furcarev2/screens/customer/screen_dashboard.dart';
+import 'package:furcarev2/screens/customer/screen_create_profile_1.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -15,9 +20,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    precacheImage(const AssetImage('assets/success.gif'), context);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthTokenProvider()),
+        ChangeNotifierProvider(create: (_) => RegistrationProvider()),
       ],
       child: MaterialApp(
         title: 'Furcare v2',
@@ -27,8 +35,13 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          // When navigating to the "/" route, build the FirstScreen widget.
-          '/': (context) => const ScreenAdminLogin(),
+          // '/': (context) => const ScreenAdminLogin(), // for admin
+          '/': (context) => const ScreenCustomerLogin(),
+          '/c/register': (context) => const ScreenCustomerRegister(),
+          '/c/main': (context) => const CustomerMain(), // for admin
+          '/c/create/profile/1': (context) => const CreateProfileStep1(),
+          '/c/create/profile/2': (context) => const CreateProfileStep2(),
+
           // When navigating to the "/second" route, build the SecondScreen widget.
           '/a/management/staff': (context) => const AdminStaffManagement(),
           '/a/profile': (context) => const AdminProfile(),

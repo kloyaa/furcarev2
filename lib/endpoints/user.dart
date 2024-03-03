@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:furcarev2/consts/api.dart';
+import 'package:furcarev2/providers/client.dart';
 
 class ClientApi {
   Dio dio = Dio();
@@ -16,6 +17,18 @@ class ClientApi {
   Future<Response> getMeProfile() async {
     try {
       Response response = await dio.get('/user/v1/profile/me');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> createMeProfile(Map profile) async {
+    try {
+      Response response = await dio.post(
+        '/user/v1/profile/me',
+        data: profile,
+      );
       return response;
     } on DioException {
       rethrow;

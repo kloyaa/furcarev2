@@ -72,7 +72,6 @@ class _AdminProfileState extends State<AdminProfile> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    // onTap: () => navigate(context, route: "/admin/main"),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Text(
@@ -101,7 +100,10 @@ class _AdminProfileState extends State<AdminProfile> {
                   ),
                   const SizedBox(width: 25.0),
                   GestureDetector(
-                    // onTap: () => navigate(context, route: "/admin/staff-list"),
+                    onTap: () => Navigator.pushReplacementNamed(
+                      context,
+                      "/a/management/staff",
+                    ),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Text(

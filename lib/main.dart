@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/registration.dart';
 import 'package:furcarev2/screens/admin/screen_profile.dart';
+import 'package:furcarev2/screens/admin/screen_staff_enrollment.dart';
 import 'package:furcarev2/screens/admin/screen_staff_management.dart';
+import 'package:furcarev2/screens/auth/login/screen_admin_login.dart';
 import 'package:furcarev2/screens/auth/login/screen_customer_login.dart';
 import 'package:furcarev2/screens/auth/register/screen_customer_registration.dart';
 import 'package:furcarev2/screens/customer/screen_create_profile_2.dart';
@@ -35,8 +37,8 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          // '/': (context) => const ScreenAdminLogin(), // for admin
-          '/': (context) => const ScreenCustomerLogin(),
+          '/': (context) => const ScreenAdminLogin(), // for admin
+          // '/': (context) => const ScreenCustomerLogin(), // for customer
           '/c/register': (context) => const ScreenCustomerRegister(),
           '/c/main': (context) => const CustomerMain(), // for admin
           '/c/create/profile/1': (context) => const CreateProfileStep1(),
@@ -44,6 +46,8 @@ class MyApp extends StatelessWidget {
 
           // When navigating to the "/second" route, build the SecondScreen widget.
           '/a/management/staff': (context) => const AdminStaffManagement(),
+          '/a/management/staff/enrollment': (context) =>
+              const AdminStaffEnrollment(),
           '/a/profile': (context) => const AdminProfile(),
         },
       ),

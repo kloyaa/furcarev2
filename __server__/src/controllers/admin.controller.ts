@@ -167,6 +167,11 @@ export const getStaffs = async (req: TRequest, res: TResponse) => {
                     'profile.user': 0,
                     'profile.__v': 0,
                 }
+            },
+            {
+                $match: {
+                    profile: { $exists: true }
+                }
             }
         ]);
 

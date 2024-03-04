@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:furcarev2/consts/api.dart';
-import 'package:furcarev2/providers/client.dart';
 
 class ClientApi {
   Dio dio = Dio();

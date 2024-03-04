@@ -7,6 +7,8 @@ import 'package:furcarev2/screens/admin/screen_staff_management.dart';
 import 'package:furcarev2/screens/auth/login/screen_admin_login.dart';
 import 'package:furcarev2/screens/auth/login/screen_customer_login.dart';
 import 'package:furcarev2/screens/auth/register/screen_customer_registration.dart';
+import 'package:furcarev2/screens/customer/screen_create_owner.dart';
+import 'package:furcarev2/screens/customer/screen_create_pet.dart';
 import 'package:furcarev2/screens/customer/screen_create_profile_2.dart';
 import 'package:furcarev2/screens/customer/screen_dashboard.dart';
 import 'package:furcarev2/screens/customer/screen_create_profile_1.dart';
@@ -37,12 +39,14 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => const ScreenAdminLogin(), // for admin
-          // '/': (context) => const ScreenCustomerLogin(), // for customer
+          // '/': (context) => const ScreenAdminLogin(), // for admin
+          '/': (context) => const ScreenCustomerLogin(), // for customer
           '/c/register': (context) => const ScreenCustomerRegister(),
           '/c/main': (context) => const CustomerMain(), // for admin
           '/c/create/profile/1': (context) => const CreateProfileStep1(),
           '/c/create/profile/2': (context) => const CreateProfileStep2(),
+          '/c/create/profile/owner': (context) => const CreateOwner(),
+          '/c/create/profile/pet': (context) => const CreatePet(),
 
           // When navigating to the "/second" route, build the SecondScreen widget.
           '/a/management/staff': (context) => const AdminStaffManagement(),

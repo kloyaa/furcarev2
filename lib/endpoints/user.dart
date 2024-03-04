@@ -22,6 +22,33 @@ class ClientApi {
     }
   }
 
+  Future<Response> getMePets() async {
+    try {
+      Response response = await dio.get('/pet/v1/me');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> createPet() async {
+    try {
+      Response response = await dio.post('/pet/v1/me');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> getMeOwnerProfile() async {
+    try {
+      Response response = await dio.get('/owner/v1/me');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> createMeProfile(Map profile) async {
     try {
       Response response = await dio.post(

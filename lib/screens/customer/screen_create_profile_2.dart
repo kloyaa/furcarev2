@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:furcarev2/classes/login_response.dart';
 import 'package:furcarev2/classes/registration.dart';
 import 'package:furcarev2/consts/colors.dart';
-import 'package:furcarev2/endpoints/auth.dart';
 import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/client.dart';

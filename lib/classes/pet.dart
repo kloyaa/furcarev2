@@ -42,6 +42,35 @@ class Pet {
   }
 }
 
+class CreatePetPayload {
+  final String name;
+  final String specie;
+  final int age;
+  final String gender;
+  final String identification;
+  final AdditionalInfo additionalInfo;
+
+  CreatePetPayload({
+    required this.name,
+    required this.specie,
+    required this.age,
+    required this.gender,
+    required this.identification,
+    required this.additionalInfo,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'specie': specie,
+      'age': age,
+      'gender': gender,
+      'identification': identification,
+      'additionalInfo': additionalInfo.toJson(),
+    };
+  }
+}
+
 class AdditionalInfo {
   final bool historyOfBitting;
   final String feedingInstructions;
@@ -59,5 +88,13 @@ class AdditionalInfo {
       feedingInstructions: json['feedingInstructions'],
       medicationInstructions: json['medicationInstructions'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'historyOfBitting': historyOfBitting,
+      'feedingInstructions': feedingInstructions,
+      'medicationInstructions': medicationInstructions
+    };
   }
 }

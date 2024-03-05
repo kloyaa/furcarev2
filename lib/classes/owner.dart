@@ -41,3 +41,20 @@ class OwnerProfile {
     );
   }
 }
+
+class OwnerProfilePayload {
+  final String emergencyContactNo;
+  final String work;
+
+  OwnerProfilePayload({
+    required this.emergencyContactNo,
+    required this.work,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'emergencyContactNo': emergencyContactNo,
+      'work': work,
+    };
+  }
+}

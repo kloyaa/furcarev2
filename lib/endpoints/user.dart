@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:furcarev2/classes/owner.dart';
+import 'package:furcarev2/classes/pet.dart';
 import 'package:furcarev2/consts/api.dart';
 
 class ClientApi {
@@ -31,9 +33,24 @@ class ClientApi {
     }
   }
 
-  Future<Response> createPet() async {
+  Future<Response> createPet(CreatePetPayload payload) async {
     try {
-      Response response = await dio.post('/pet/v1/me');
+      Response response = await dio.post(
+        '/pet/v1/me',
+        data: payload.toJson(),
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> createOwner(OwnerProfilePayload payload) async {
+    try {
+      Response response = await dio.post(
+        '/owner/v1',
+        data: payload.toJson(),
+      );
       return response;
     } on DioException {
       rethrow;

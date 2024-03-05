@@ -14,18 +14,6 @@ class _CustomerTabDashboardState extends State<CustomerTabDashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: AppBar(
-        leading: const SizedBox(),
-        leadingWidth: 0,
-        title: Text(
-          'Services',
-          style: GoogleFonts.urbanist(
-            fontSize: 12.0,
-            fontWeight: FontWeight.w600,
-            color: Colors.pink,
-          ),
-        ),
-      ),
       body: Container(
         margin: const EdgeInsets.symmetric(
           horizontal: 30.0,

@@ -1,8 +1,15 @@
+import 'package:dio/dio.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
+import 'package:furcarev2/classes/login_response.dart';
+import 'package:furcarev2/classes/owner.dart';
 import 'package:furcarev2/consts/colors.dart';
+import 'package:furcarev2/endpoints/user.dart';
+import 'package:furcarev2/providers/authentication.dart';
+import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:provider/provider.dart';
 
 class CreateOwner extends StatefulWidget {
   const CreateOwner({super.key});
@@ -19,6 +26,57 @@ class _CreateOwnerState extends State<CreateOwner> {
 
   // State
   final bool _isCreateError = false;
+  String _accessToken = "";
+
+  Future<void> handleCreateOwner() async {
+    ClientApi clientApi = ClientApi(_accessToken);
+
+    final emergencyNo = _emergenyNoController.text.trim();
+    final work = _workController.text.trim();
+
+    if (emergencyNo.isEmpty) {
+      return _emergenyNoFocus.requestFocus();
+    }
+
+    if (work.isEmpty) {
+      return _workFocus.requestFocus();
+    }
+
+    try {
+      await clientApi.createOwner(
+        OwnerProfilePayload(
+          emergencyContactNo: "0${emergencyNo.replaceAll('-', '')}",
+          work: work,
+        ),
+      );
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          "Updated successfully!",
+          color: Colors.green,
+          fontSize: 14.0,
+          duration: 1,
+        );
+
+        Future.delayed(const Duration(seconds: 2), () {
+          if (context.mounted) {
+            Navigator.pushReplacementNamed(context, '/c/create/profile/pet');
+          }
+        });
+      }
+    } on DioException catch (e) {
+      print(e.response!.data);
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          errorResponse.message,
+          color: AppColors.danger,
+          fontSize: 14.0,
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -26,6 +84,14 @@ class _CreateOwnerState extends State<CreateOwner> {
 
     _workFocus = FocusNode();
     _emergenyNoFocus = FocusNode();
+
+    final accessTokenProvider = Provider.of<AuthTokenProvider>(
+      context,
+      listen: false,
+    );
+
+    // Retrieve the access token from the provider and assign it to _accessToken
+    _accessToken = accessTokenProvider.authToken?.accessToken ?? '';
   }
 
   @override
@@ -63,7 +129,7 @@ class _CreateOwnerState extends State<CreateOwner> {
                   fontWeight: FontWeight.w300,
                 ),
               ),
-              const SizedBox(height: 30.0),
+              const SizedBox(height: 20.0),
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -141,9 +207,7 @@ class _CreateOwnerState extends State<CreateOwner> {
               const Spacer(),
               ElevatedButton(
                 onPressed: () async {
-                  if (context.mounted) {
-                    // handleSaveBasicInfo();
-                  }
+                  handleCreateOwner();
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,

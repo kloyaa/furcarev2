@@ -46,11 +46,7 @@ class _CustomerMainState extends State<CustomerMain> {
     ClientApi clientApi = ClientApi(_accessToken);
     try {
       Response<dynamic> response = await clientApi.getMePets();
-
-      List<Map<String, dynamic>> jsonDataList =
-          List<Map<String, dynamic>>.from(response.data);
-
-      List<Pet> pets = jsonDataList.map((json) => Pet.fromJson(json)).toList();
+      List<dynamic> pets = response.data;
 
       if (pets.isEmpty) {
         if (context.mounted) {
@@ -75,7 +71,7 @@ class _CustomerMainState extends State<CustomerMain> {
     // Retrieve the access token from the provider and assign it to _accessToken
     _accessToken = accessTokenProvider.authToken?.accessToken ?? '';
 
-    // handleGetOwnerProfile();
+    handleGetOwnerProfile();
     handleGetPets();
   }
 
@@ -107,11 +103,11 @@ class _CustomerMainState extends State<CustomerMain> {
           ),
           SalomonBottomBarItem(
             icon: const Icon(
-              Icons.pets_outlined,
+              Ionicons.paw_outline,
               size: 15.0,
             ),
             title: Text(
-              "Pets",
+              "Furs",
               style: GoogleFonts.urbanist(
                 fontSize: 10.0,
               ),

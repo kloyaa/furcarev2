@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furcarev2/classes/login_response.dart';
 import 'package:furcarev2/classes/payload.dart';
-import 'package:furcarev2/classes/pet.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/admin.dart';
 import 'package:furcarev2/providers/authentication.dart';

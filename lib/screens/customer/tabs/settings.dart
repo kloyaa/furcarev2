@@ -15,18 +15,6 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: AppBar(
-        leading: const SizedBox(),
-        leadingWidth: 0,
-        title: Text(
-          'Settings',
-          style: GoogleFonts.urbanist(
-            fontSize: 12.0,
-            fontWeight: FontWeight.w600,
-            color: Colors.pink,
-          ),
-        ),
-      ),
       body: Container(
         margin: const EdgeInsets.symmetric(
           horizontal: 30.0,
@@ -75,7 +63,7 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
                 ),
               ),
               subtitle: Text(
-                'I nfo that is visible to furcare staffs',
+                'Info that is visible to furcare staffs',
                 style: GoogleFonts.urbanist(
                   color: AppColors.primary,
                   fontSize: 10.0,

@@ -35,6 +35,7 @@ class _GenderSelectionWidgetState extends State<GenderSelectionWidget> {
               ),
               value: 'male',
               groupValue: _selectedGender,
+              activeColor: AppColors.primary,
               onChanged: (value) {
                 setState(() {
                   _selectedGender = value;
@@ -57,6 +58,7 @@ class _GenderSelectionWidgetState extends State<GenderSelectionWidget> {
                     fontSize: 10.0,
                   )),
               value: 'female',
+              activeColor: AppColors.primary,
               groupValue: _selectedGender,
               onChanged: (value) {
                 setState(() {
@@ -79,6 +81,7 @@ class _GenderSelectionWidgetState extends State<GenderSelectionWidget> {
                     fontSize: 10.0,
                   )),
               value: 'other',
+              activeColor: AppColors.primary,
               groupValue: _selectedGender,
               onChanged: (value) {
                 setState(() {

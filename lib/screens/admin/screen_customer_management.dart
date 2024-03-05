@@ -776,7 +776,7 @@ class _AdminCustomerManagementState extends State<AdminCustomerManagement> {
                                   shrinkWrap: true,
                                   itemBuilder: (context, innerIndex) {
                                     // Build your inner list item here using the innerIndex
-                                    final pet = pets[index];
+                                    final pet = pets[innerIndex];
                                     return Card(
                                       color: Colors.purple.withOpacity(0.03),
                                       elevation: 0,

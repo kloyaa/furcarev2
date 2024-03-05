@@ -6,7 +6,7 @@ class Pet {
   final int age;
   final String gender;
   final String identification;
-  final Map<String, dynamic> additionalInfo;
+  final AdditionalInfo additionalInfo;
   final String createdAt;
   final String updatedAt;
   final int v;
@@ -38,6 +38,26 @@ class Pet {
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       v: json['__v'],
+    );
+  }
+}
+
+class AdditionalInfo {
+  final bool historyOfBitting;
+  final String feedingInstructions;
+  final String medicationInstructions;
+
+  AdditionalInfo({
+    required this.historyOfBitting,
+    required this.feedingInstructions,
+    required this.medicationInstructions,
+  });
+
+  factory AdditionalInfo.fromJson(Map<String, dynamic> json) {
+    return AdditionalInfo(
+      historyOfBitting: json['historyOfBitting'],
+      feedingInstructions: json['feedingInstructions'],
+      medicationInstructions: json['medicationInstructions'],
     );
   }
 }

@@ -24,6 +24,15 @@ class AdminApi {
     }
   }
 
+  Future<Response> getCustomers() async {
+    try {
+      Response response = await dio.get('/admin/v1/customers');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> updateProfileActiveStatus(UpdateActiveStatus payload) async {
     try {
       Response response = await dio.put(

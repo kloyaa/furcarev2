@@ -96,6 +96,13 @@ export const getCustomers = async (req: TRequest, res: Response) => {
                     'pets.__v': 0,
                     'pets.user': 0
                 }
+            },
+            {
+                $match: {
+                    profile: { $exists: true },
+                    owner: { $exists: true }
+
+                }
             }
         ]);
 

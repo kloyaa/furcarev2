@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furcarev2/classes/login_response.dart';
 import 'package:furcarev2/classes/payload.dart';
+import 'package:furcarev2/classes/pet.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/admin.dart';
 import 'package:furcarev2/providers/authentication.dart';
@@ -12,20 +13,21 @@ import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class AdminStaffManagement extends StatefulWidget {
-  const AdminStaffManagement({super.key});
+class AdminCustomerManagement extends StatefulWidget {
+  const AdminCustomerManagement({super.key});
 
   @override
-  State<AdminStaffManagement> createState() => _AdminStaffManagementState();
+  State<AdminCustomerManagement> createState() =>
+      _AdminCustomerManagementState();
 }
 
-class _AdminStaffManagementState extends State<AdminStaffManagement> {
+class _AdminCustomerManagementState extends State<AdminCustomerManagement> {
   // State
   String _accessToken = "";
 
   Future<List<dynamic>> handleGetStaffs() async {
     AdminApi adminApi = AdminApi(_accessToken);
-    Response<dynamic> response = await adminApi.getStaffs();
+    Response<dynamic> response = await adminApi.getCustomers();
 
     final staffs = response.data.toList();
     return staffs;
@@ -188,13 +190,16 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                   ),
                   const SizedBox(width: 25.0),
                   GestureDetector(
+                    onTap: () => Navigator.pushReplacementNamed(
+                      context,
+                      "/a/management/staff",
+                    ),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Text(
                         "Staffs",
                         style: GoogleFonts.urbanist(
                           color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
                           fontSize: 10.0,
                         ),
                       ),
@@ -202,15 +207,12 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                   ),
                   const SizedBox(width: 25.0),
                   GestureDetector(
-                    onTap: () => Navigator.pushReplacementNamed(
-                      context,
-                      "/a/management/customers",
-                    ),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Text(
                         "Users and Pets",
                         style: GoogleFonts.urbanist(
+                          fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                           fontSize: 10.0,
                         ),
@@ -218,23 +220,6 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                     ),
                   ),
                   const Spacer(),
-                  GestureDetector(
-                    onTap: () => Navigator.pushReplacementNamed(
-                      context,
-                      "/a/management/staff/enrollment",
-                    ),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Text(
-                        "Enroll Staff",
-                        style: GoogleFonts.urbanist(
-                          color: AppColors.primary,
-                          fontSize: 10.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 25.0),
                   GestureDetector(
                     onTap: () => Navigator.pushReplacementNamed(context, '/'),
                     child: MouseRegion(
@@ -257,7 +242,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
       body: Center(
         child: Container(
           margin: const EdgeInsets.all(20.0),
-          width: MediaQuery.of(context).size.width * 0.50,
+          width: MediaQuery.of(context).size.width * 0.80,
           child: FutureBuilder<List<dynamic>>(
             future: handleGetStaffs(),
             builder: (context, snapshot) {
@@ -280,13 +265,15 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                   ),
                 ));
               } else {
-                final List<dynamic>? staffList = snapshot.data;
+                final List<dynamic>? customers = snapshot.data;
                 return ListView.builder(
-                  itemCount: staffList!.length,
+                  itemCount: customers!.length,
                   itemBuilder: (context, index) {
-                    final staff = staffList[index];
+                    final customer = customers[index];
 
-                    final bool isActive = staff['profile']['isActive'];
+                    final bool isActive = customer['profile']['isActive'];
+                    final List pets = customer['pets'];
+
                     return Container(
                       padding: const EdgeInsets.all(50.0),
                       margin: const EdgeInsets.only(bottom: 10.0),
@@ -324,7 +311,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                   handleUpdateActiveStatus(
                                     UpdateActiveStatus(
                                       isActive: index == 0 ? true : false,
-                                      user: staff['_id'],
+                                      user: customer['_id'],
                                     ),
                                   );
                                 },
@@ -359,7 +346,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['firstName'],
+                                        customer['profile']['firstName'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 18.0,
                                           color: AppColors.primary,
@@ -382,7 +369,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['lastName'],
+                                        customer['profile']['lastName'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 18.0,
                                           color: AppColors.primary,
@@ -407,7 +394,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                       Text(
                                         formatBirthDate(
                                           DateTime.parse(
-                                            staff['profile']['birthdate'],
+                                            customer['profile']['birthdate'],
                                           ),
                                         ),
                                         style: GoogleFonts.urbanist(
@@ -432,7 +419,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['gender'],
+                                        customer['profile']['gender'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 18.0,
                                           color: AppColors.primary,
@@ -468,7 +455,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['username'],
+                                        customer['username'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,
@@ -491,7 +478,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['email'],
+                                        customer['email'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,
@@ -527,7 +514,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['contact']['email'],
+                                        customer['profile']['contact']['email'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,
@@ -550,7 +537,8 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['contact']['number'],
+                                        customer['profile']['contact']
+                                            ['number'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,
@@ -586,7 +574,8 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['address']['present'],
+                                        customer['profile']['address']
+                                            ['present'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,
@@ -609,7 +598,8 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['address']['present'],
+                                        customer['profile']['address']
+                                            ['present'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,
@@ -705,11 +695,308 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                               ),
                             ],
                           ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 50.0,
+                            ),
+                            width: 0.5,
+                            height: 500.0,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Other info",
+                                        style: GoogleFonts.urbanist(
+                                          fontSize: 10.0,
+                                          color: AppColors.primary,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10.0),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Work",
+                                            style: GoogleFonts.urbanist(
+                                              fontSize: 10.0,
+                                              color: AppColors.primary
+                                                  .withOpacity(0.5),
+                                            ),
+                                          ),
+                                          Text(
+                                            customer['owner']['work'],
+                                            style: GoogleFonts.urbanist(
+                                              fontSize: 18.0,
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10.0),
+                                          Text(
+                                            "Emergency Mobile No.",
+                                            style: GoogleFonts.urbanist(
+                                              fontSize: 10.0,
+                                              color: AppColors.primary
+                                                  .withOpacity(0.5),
+                                            ),
+                                          ),
+                                          Text(
+                                            customer['owner']
+                                                ['emergencyContactNo'],
+                                            style: GoogleFonts.urbanist(
+                                              fontSize: 18.0,
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(width: 40.0),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 30.0),
+                                ListView.builder(
+                                  itemCount: pets.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, innerIndex) {
+                                    // Build your inner list item here using the innerIndex
+                                    final pet = pets[index];
+                                    return Card(
+                                      color: Colors.purple.withOpacity(0.03),
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5.0),
+                                        side: const BorderSide(
+                                          color: Colors.white,
+                                          width: 0,
+                                        ), // Border color
+                                      ),
+                                      child: Container(
+                                        padding: const EdgeInsets.all(20.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Name",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        fontSize: 10.0,
+                                                        color: AppColors.primary
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      pet['name'],
+                                                      style:
+                                                          GoogleFonts.sunshiney(
+                                                        fontSize: 18.0,
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(width: 30.0),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Specie",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        fontSize: 10.0,
+                                                        color: AppColors.primary
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      pet['specie'],
+                                                      style:
+                                                          GoogleFonts.sunshiney(
+                                                        fontSize: 18.0,
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(width: 30.0),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Gender",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        fontSize: 10.0,
+                                                        color: AppColors.primary
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      pet['gender'],
+                                                      style:
+                                                          GoogleFonts.sunshiney(
+                                                        fontSize: 18.0,
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const Spacer(),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Identification",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        fontSize: 10.0,
+                                                        color: AppColors.primary
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      pet['identification'],
+                                                      style:
+                                                          GoogleFonts.rajdhani(
+                                                        fontSize: 18.0,
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 20.0),
+                                            Text(
+                                              "Feeding instructions",
+                                              style: GoogleFonts.urbanist(
+                                                fontSize: 10.0,
+                                                color: AppColors.primary
+                                                    .withOpacity(0.5),
+                                              ),
+                                            ),
+                                            Text(
+                                              pet['additionalInfo']
+                                                  ['feedingInstructions'],
+                                              style: GoogleFonts.urbanist(
+                                                fontSize: 12.0,
+                                                color: AppColors.primary,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 20.0),
+                                            Text(
+                                              "Medication instructions",
+                                              style: GoogleFonts.urbanist(
+                                                fontSize: 10.0,
+                                                color: AppColors.primary
+                                                    .withOpacity(0.5),
+                                              ),
+                                            ),
+                                            Text(
+                                              pet['additionalInfo']
+                                                  ['medicationInstructions'],
+                                              style: GoogleFonts.urbanist(
+                                                fontSize: 12.0,
+                                                color: AppColors.primary,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 20.0),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "History of biting?",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        fontSize: 10.0,
+                                                        color: AppColors.primary
+                                                            .withOpacity(0.5),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      pet['additionalInfo'][
+                                                              'historyOfBitting']
+                                                          ? "Yes"
+                                                          : "No",
+                                                      style:
+                                                          GoogleFonts.urbanist(
+                                                        fontSize: 12.0,
+                                                        color:
+                                                            AppColors.primary,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const Icon(
+                                                  Ionicons.paw,
+                                                  color: Colors.purple,
+                                                  size: 23.0,
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       // title:,
-                      // subtitle: Text(staff['email']),
-                      // trailing: Text('Created: ${staff['createdAt'].toString()}'),
+                      // subtitle: Text(customer['email']),
+                      // trailing: Text('Created: ${customer['createdAt'].toString()}'),
                     );
                   },
                 );

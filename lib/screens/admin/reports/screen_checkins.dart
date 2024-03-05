@@ -151,7 +151,10 @@ class _CheckinsState extends State<Checkins> {
                   ),
                   const SizedBox(width: 25.0),
                   GestureDetector(
-                    // onTap: () => navigate(context, route: "/admin/user-list"),
+                    onTap: () => Navigator.pushReplacementNamed(
+                      context,
+                      "/a/management/customers",
+                    ),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
                       child: Text(

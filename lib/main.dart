@@ -4,6 +4,7 @@ import 'package:furcarev2/providers/registration.dart';
 import 'package:furcarev2/screens/admin/reports/screen_checkins.dart';
 import 'package:furcarev2/screens/admin/reports/screen_service_usage.dart';
 import 'package:furcarev2/screens/admin/reports/screen_transactions.dart';
+import 'package:furcarev2/screens/admin/screen_customer_management.dart';
 import 'package:furcarev2/screens/admin/screen_profile.dart';
 import 'package:furcarev2/screens/admin/screen_staff_enrollment.dart';
 import 'package:furcarev2/screens/admin/screen_staff_management.dart';
@@ -54,7 +55,8 @@ class MyApp extends StatelessWidget {
           '/a/management/staff': (context) => const AdminStaffManagement(),
           '/a/management/staff/enrollment': (context) =>
               const AdminStaffEnrollment(),
-
+          '/a/management/customers': (context) =>
+              const AdminCustomerManagement(),
           '/a/report/checkins': (context) => const Checkins(),
           '/a/report/service-usage': (context) => const ServiceUsage(),
           '/a/report/transactions': (context) => const Transactions(),

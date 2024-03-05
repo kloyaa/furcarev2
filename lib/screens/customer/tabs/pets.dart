@@ -11,7 +11,7 @@ class CustomerTabPets extends StatefulWidget {
 class _CustomerTabPetsState extends State<CustomerTabPets> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColors.secondary,
       body: Center(
         child: Text('Pets'),

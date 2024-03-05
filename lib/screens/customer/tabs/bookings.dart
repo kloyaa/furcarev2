@@ -11,7 +11,7 @@ class CustomerTabBookings extends StatefulWidget {
 class _CustomerTabBookingsState extends State<CustomerTabBookings> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: AppColors.secondary,
       body: Center(
         child: Text('Bookings'),

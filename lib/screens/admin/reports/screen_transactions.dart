@@ -15,7 +15,7 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions> {
   // State
-  String _accessToken = "";
+  final String _accessToken = "";
 
   Future<List<dynamic>> getTransactions() async {
     AdminApi adminApi = AdminApi(_accessToken);

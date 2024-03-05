@@ -14,7 +14,7 @@ class Checkins extends StatefulWidget {
 
 class _CheckinsState extends State<Checkins> {
   // State
-  String _accessToken = "";
+  final String _accessToken = "";
 
   Future<List<dynamic>> handleGetCheckins() async {
     AdminApi adminApi = AdminApi(_accessToken);

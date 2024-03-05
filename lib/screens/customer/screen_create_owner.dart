@@ -18,7 +18,7 @@ class _CreateOwnerState extends State<CreateOwner> {
   late final FocusNode _emergenyNoFocus;
 
   // State
-  bool _isCreateError = false;
+  final bool _isCreateError = false;
 
   @override
   void initState() {

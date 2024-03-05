@@ -5,7 +5,7 @@ import 'package:furcarev2/classes/registration.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/authentication.dart';
-import 'package:furcarev2/providers/client.dart';
+import 'package:furcarev2/classes/client.dart';
 import 'package:furcarev2/providers/registration.dart';
 import 'package:furcarev2/screens/success.dart';
 import 'package:furcarev2/widgets/snackbar.dart';
@@ -33,7 +33,7 @@ class _CreateProfileStep2State extends State<CreateProfileStep2> {
   late final FocusNode _mobileNoFocus;
 
   // State
-  bool _isCreateError = false;
+  final bool _isCreateError = false;
 
   Future handleCreateProfile() async {
     final present = _presentController.text.trim();

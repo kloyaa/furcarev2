@@ -14,7 +14,7 @@ class ServiceUsage extends StatefulWidget {
 
 class _ServiceUsageState extends State<ServiceUsage> {
   // State
-  String _accessToken = "";
+  final String _accessToken = "";
 
   Future<List<dynamic>> handleGetServiceUsage() async {
     AdminApi adminApi = AdminApi(_accessToken);

@@ -210,7 +210,7 @@ class _CreateProfileStep1State extends State<CreateProfileStep1> {
                       config: CalendarDatePicker2Config(
                         calendarType: CalendarDatePicker2Type.single,
                       ),
-                      value: [],
+                      value: const [],
                       onValueChanged: (dates) {
                         final String date = dates[0]!.toIso8601String();
                         _selectedBirthdate = date.substring(0, 10);

@@ -18,7 +18,7 @@ class _CreatePetState extends State<CreatePet> {
   late final FocusNode _emergenyNoFocus;
 
   // State
-  bool _isCreateError = false;
+  final bool _isCreateError = false;
 
   @override
   void initState() {

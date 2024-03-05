@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/registration.dart';
+import 'package:furcarev2/screens/admin/reports/screen_checkins.dart';
+import 'package:furcarev2/screens/admin/reports/screen_service_usage.dart';
+import 'package:furcarev2/screens/admin/reports/screen_transactions.dart';
 import 'package:furcarev2/screens/admin/screen_profile.dart';
 import 'package:furcarev2/screens/admin/screen_staff_enrollment.dart';
 import 'package:furcarev2/screens/admin/screen_staff_management.dart';
@@ -39,8 +42,8 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          // '/': (context) => const ScreenAdminLogin(), // for admin
-          '/': (context) => const ScreenCustomerLogin(), // for customer
+          '/': (context) => const ScreenAdminLogin(), // for admin
+          // '/': (context) => const ScreenCustomerLogin(), // for customer
           '/c/register': (context) => const ScreenCustomerRegister(),
           '/c/main': (context) => const CustomerMain(), // for admin
           '/c/create/profile/1': (context) => const CreateProfileStep1(),
@@ -52,6 +55,11 @@ class MyApp extends StatelessWidget {
           '/a/management/staff': (context) => const AdminStaffManagement(),
           '/a/management/staff/enrollment': (context) =>
               const AdminStaffEnrollment(),
+
+          '/a/report/checkins': (context) => const Checkins(),
+          '/a/report/service-usage': (context) => const ServiceUsage(),
+          '/a/report/transactions': (context) => const Transactions(),
+
           '/a/profile': (context) => const AdminProfile(),
         },
       ),

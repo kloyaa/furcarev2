@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:ionicons/ionicons.dart';
 
 bool isEmail(String input) {
   final emailRegex = RegExp(
@@ -51,4 +52,27 @@ bool validateFieldNotEmpty(String value, FocusNode focusNode) {
     return false;
   }
   return true;
+}
+
+Icon getIconByService(String service) {
+  if (service == "grooming") {
+    return const Icon(
+      Ionicons.cut_outline,
+      color: Colors.purple,
+    );
+  }
+  if (service == "transit") {
+    return const Icon(
+      Ionicons.car_outline,
+      color: Colors.deepOrange,
+    );
+  }
+  if (service == "boarding") {
+    return const Icon(
+      Ionicons.paw_outline,
+      color: Colors.brown,
+    );
+  }
+
+  return const Icon(Ionicons.checkbox_outline);
 }

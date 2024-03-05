@@ -20,11 +20,6 @@ export const createPet = async (req: TRequest, res: Response) => {
         const { name, specie, age, gender, identification, additionalInfo } = req.body;
         const userId = req.user.id;
 
-        const pet = await Pet.findOne({ user: userId });
-        if (pet) {
-            return res.status(403).json(statuses['04']);
-        }
-
         const newPet = new Pet({
             user: userId,
             name,

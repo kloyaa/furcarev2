@@ -1,4 +1,4 @@
-import 'package:furcarev2/providers/client.dart';
+import 'package:furcarev2/classes/client.dart';
 
 class Staff {
   final String id;

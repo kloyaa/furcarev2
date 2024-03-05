@@ -250,7 +250,7 @@ export const getSeriveUsageStats = async (req: TRequest, res: TResponse) => {
             return await model.aggregate([
                 {
                     $match: {
-                        schedule: {
+                        createdAt: {
                             $gte: startDate,
                             $lte: endDate
                         }
@@ -271,14 +271,16 @@ export const getSeriveUsageStats = async (req: TRequest, res: TResponse) => {
             getAggregateResult(GroomingApplication)
         ]);
 
+        console.log({boardingStats, transitStats, groomingStats})
+
         const formatResult = (stats: any[]) => {
             return stats.length > 0 ? stats[0].total : 0;
         };
 
         return res.status(200).json([
-            { grooming: formatResult(groomingStats) },
-            { transit: formatResult(transitStats) },
-            { boarding: formatResult(boardingStats) }
+            { Grooming: formatResult(groomingStats) },
+            { "Pick up and drop off": formatResult(transitStats) },
+            { Boarding: formatResult(boardingStats) }
         ]);
     } catch (error) {
         console.error('@getSeriveUsageStats error', error);

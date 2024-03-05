@@ -223,18 +223,13 @@ class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
                 ),
                 const SizedBox(height: 10.0),
                 _loginErrorMessage.isNotEmpty
-                    ? Column(
-                        children: [
-                          Text(
-                            _loginErrorMessage,
-                            style: GoogleFonts.urbanist(
-                              color: AppColors.danger,
-                              fontSize: 10.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 10.0),
-                        ],
+                    ? Text(
+                        _loginErrorMessage,
+                        style: GoogleFonts.urbanist(
+                          color: AppColors.danger,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w500,
+                        ),
                       )
                     : const SizedBox(),
                 Text(

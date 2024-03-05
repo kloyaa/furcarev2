@@ -85,18 +85,83 @@ class _AdminProfileState extends State<AdminProfile> {
                     ),
                   ),
                   const SizedBox(width: 25.0),
-                  GestureDetector(
-                    // onTap: () => navigate(context, route: "/admin/reports"),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Text(
-                        "Reports",
-                        style: GoogleFonts.urbanist(
-                          color: AppColors.primary,
-                          fontSize: 12.0,
-                        ),
+                  PopupMenuButton<String>(
+                    offset: const Offset(0, 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: const BorderSide(
+                        color: Colors.grey,
+                        width: 0.1,
+                      ), // Border color
+                    ),
+                    tooltip: "Click to view",
+                    color: Colors.white,
+                    elevation: 0,
+                    position: PopupMenuPosition.under,
+                    child: Text(
+                      "Reports",
+                      style: GoogleFonts.urbanist(
+                        color: AppColors.primary,
+                        fontSize: 12.0,
                       ),
                     ),
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'check_ins',
+                        child: Text(
+                          'Check ins',
+                          style: GoogleFonts.urbanist(
+                            color: AppColors.primary,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'service_usages',
+                        child: Text(
+                          'Service usages',
+                          style: GoogleFonts.urbanist(
+                            color: AppColors.primary,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'transactions',
+                        child: Text(
+                          'Transactions',
+                          style: GoogleFonts.urbanist(
+                            color: AppColors.primary,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                    onSelected: (String value) {
+                      switch (value) {
+                        case 'check_ins':
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/a/report/checkins",
+                          );
+                          break;
+                        case 'service_usages':
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/a/report/service-usage",
+                          );
+                          break;
+                        case 'transactions':
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/a/report/transactions",
+                          );
+                          break;
+                        default:
+                          break;
+                      }
+                    },
                   ),
                   const SizedBox(width: 25.0),
                   GestureDetector(

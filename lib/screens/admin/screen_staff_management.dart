@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:furcarev2/classes/login_response.dart';
+import 'package:furcarev2/classes/payload.dart';
 import 'package:furcarev2/classes/staff.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/admin.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/utils/common.util.dart';
-import 'package:furcarev2/widgets/gender_selection.dart';
+import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
@@ -19,45 +21,8 @@ class AdminStaffManagement extends StatefulWidget {
 }
 
 class _AdminStaffManagementState extends State<AdminStaffManagement> {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _middleNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _presentAddController = TextEditingController();
-  final TextEditingController _permanentAddController = TextEditingController();
-  final TextEditingController _mobileNoController = TextEditingController();
-
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-
-  late final FocusNode _firstNameFocus;
-  late final FocusNode _middleNameFocus;
-  late final FocusNode _lastNameFocus;
-  late final FocusNode _presentAddFocus;
-  late final FocusNode _permanentAddFocus;
-  late final FocusNode _mobileNoFocus;
-  late final FocusNode _usernameFocus;
-  late final FocusNode _passwordFocus;
-  late final FocusNode _confirmFocus;
-  late final FocusNode _emailFocus;
-
   // State
-  String _selectedGender = "male";
   String _accessToken = "";
-
-  Future<void> handleCreateEkyc() async {
-    String firstName = _firstNameController.text.trim();
-    String lastName = _lastNameController.text.trim();
-    String middleName = _middleNameController.text.trim();
-    String presentAddress = _presentAddController.text.trim();
-    String permanentAddress = _permanentAddController.text.trim();
-    String mobileNo = _mobileNoController.text.trim();
-    String username = _usernameController.text.trim();
-    String password = _passwordController.text.trim();
-    String confirm = _confirmController.text.trim();
-    String email = _emailController.text.trim();
-  }
 
   Future<List<dynamic>> handleGetStaffs() async {
     AdminApi adminApi = AdminApi(_accessToken);
@@ -65,6 +30,37 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
 
     final staffs = response.data.toList();
     return staffs;
+  }
+
+  Future<void> handleUpdateActiveStatus(UpdateActiveStatus payload) async {
+    AdminApi adminApi = AdminApi(_accessToken);
+
+    try {
+      UpdateActiveStatus update = UpdateActiveStatus(
+        isActive: payload.isActive,
+        user: payload.user,
+      );
+      await adminApi.updateProfileActiveStatus(update);
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          "Status updated successfully!",
+          color: Colors.green,
+          fontSize: 14.0,
+          duration: 1,
+        );
+      }
+    } on DioException catch (e) {
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          errorResponse.message,
+          color: AppColors.danger,
+          fontSize: 14.0,
+        );
+      }
+    }
   }
 
   @override
@@ -76,35 +72,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
 
     // Retrieve the access token from the provider and assign it to _accessToken
     _accessToken = accessTokenProvider.authToken?.accessToken ?? '';
-
-    _usernameFocus = FocusNode();
-    _emailFocus = FocusNode();
-    _passwordFocus = FocusNode();
-    _confirmFocus = FocusNode();
-    _firstNameFocus = FocusNode();
-    _middleNameFocus = FocusNode();
-    _lastNameFocus = FocusNode();
-    _presentAddFocus = FocusNode();
-    _permanentAddFocus = FocusNode();
-    _mobileNoFocus = FocusNode();
-    // _usernameController.text = "Kolya0001";
-    // _passwordController.text = "Password@123";
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _usernameFocus.dispose();
-    _emailFocus.dispose();
-    _passwordFocus.dispose();
-    _confirmFocus.dispose();
-    _firstNameFocus.dispose();
-    _middleNameFocus.dispose();
-    _lastNameFocus.dispose();
-    _presentAddFocus.dispose();
-    _permanentAddFocus.dispose();
-    _mobileNoFocus.dispose();
-    super.dispose();
   }
 
   @override
@@ -141,18 +109,83 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                     ),
                   ),
                   const SizedBox(width: 25.0),
-                  GestureDetector(
-                    // onTap: () => navigate(context, route: "/admin/reports"),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: Text(
-                        "Reports",
-                        style: GoogleFonts.urbanist(
-                          color: AppColors.primary,
-                          fontSize: 10.0,
-                        ),
+                  PopupMenuButton<String>(
+                    offset: const Offset(0, 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: const BorderSide(
+                        color: Colors.grey,
+                        width: 0.1,
+                      ), // Border color
+                    ),
+                    tooltip: "Click to view",
+                    color: Colors.white,
+                    elevation: 0,
+                    position: PopupMenuPosition.under,
+                    child: Text(
+                      "Reports",
+                      style: GoogleFonts.urbanist(
+                        color: AppColors.primary,
+                        fontSize: 12.0,
                       ),
                     ),
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      PopupMenuItem<String>(
+                        value: 'check_ins',
+                        child: Text(
+                          'Check ins',
+                          style: GoogleFonts.urbanist(
+                            color: AppColors.primary,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'service_usages',
+                        child: Text(
+                          'Service usages',
+                          style: GoogleFonts.urbanist(
+                            color: AppColors.primary,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem<String>(
+                        value: 'transactions',
+                        child: Text(
+                          'Transactions',
+                          style: GoogleFonts.urbanist(
+                            color: AppColors.primary,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                    onSelected: (String value) {
+                      switch (value) {
+                        case 'check_ins':
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/a/report/checkins",
+                          );
+                          break;
+                        case 'service_usages':
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/a/report/service-usage",
+                          );
+                          break;
+                        case 'transactions':
+                          Navigator.pushReplacementNamed(
+                            context,
+                            "/a/report/transactions",
+                          );
+                          break;
+                        default:
+                          break;
+                      }
+                    },
                   ),
                   const SizedBox(width: 25.0),
                   GestureDetector(
@@ -227,20 +260,34 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
             future: handleGetStaffs(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                print(snapshot.error);
-                return Center(child: Text('Error: ${snapshot.error}'));
+                return Center(
+                    child: Text(
+                  'Error: ${snapshot.error}',
+                  style: GoogleFonts.urbanist(
+                    color: AppColors.primary,
+                  ),
+                ));
               } else if (!snapshot.hasData) {
-                return Center(child: Text('No data available'));
+                return Center(
+                    child: Text(
+                  'No data available',
+                  style: GoogleFonts.urbanist(
+                    color: AppColors.primary,
+                  ),
+                ));
               } else {
                 final List<dynamic>? staffList = snapshot.data;
                 return ListView.builder(
                   itemCount: staffList!.length,
                   itemBuilder: (context, index) {
                     final staff = staffList[index];
+
+                    final bool isActive = staff['profile']['isActive'];
                     return Container(
                       padding: const EdgeInsets.all(50.0),
+                      margin: const EdgeInsets.only(bottom: 10.0),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                       ),
@@ -256,7 +303,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                               ),
                               const SizedBox(height: 20.0),
                               ToggleSwitch(
-                                initialLabelIndex: 0,
+                                initialLabelIndex: isActive ? 0 : 1,
                                 totalSwitches: 2,
                                 activeBgColors: const [
                                   [Colors.green],
@@ -272,7 +319,12 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                 minHeight: 30.0,
                                 labels: const ['Active', 'Inactive'],
                                 onToggle: (index) {
-                                  print('switched to: $index');
+                                  handleUpdateActiveStatus(
+                                    UpdateActiveStatus(
+                                      isActive: index == 0 ? true : false,
+                                      user: staff['_id'],
+                                    ),
+                                  );
                                 },
                               ),
                             ],
@@ -566,8 +618,91 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                   ),
                                 ],
                               ),
+                              const SizedBox(height: 50.0),
+                              Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      if (context.mounted) {
+                                        // handleSaveBasicInfo();
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: AppColors.primary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                    ),
+                                    child: SizedBox(
+                                      height: 30,
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Edit',
+                                              style: GoogleFonts.urbanist(
+                                                color: AppColors.secondary,
+                                                fontSize: 12.0,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 2.0),
+                                            const Icon(
+                                              Icons.note_alt_outlined,
+                                              size: 12,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10.0),
+                                  OutlinedButton(
+                                    onPressed: () async {
+                                      if (context.mounted) {
+                                        // handleSaveBasicInfo();
+                                      }
+                                    },
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.red,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      side: const BorderSide(color: Colors.red),
+                                    ),
+                                    child: SizedBox(
+                                      height: 30,
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Delete',
+                                              style: GoogleFonts.urbanist(
+                                                color: Colors.red,
+                                                fontSize: 12.0,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 2.0),
+                                            const Icon(
+                                              Ionicons.trash_bin_outline,
+                                              size: 12,
+                                              color: Colors.red, // Icon color
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                       // title:,

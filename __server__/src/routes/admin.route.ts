@@ -13,6 +13,6 @@ router.get('/admin/v1/staffs', getStaffs as any);
 router.get('/admin/v1/stats/checkins', getCheckInStats as any);
 router.get('/admin/v1/stats/service-usage', getSeriveUsageStats as any);
 router.put('/admin/v1/management/user-status', updateUserActiveStatus as any);
-router.get('/admin/v1/transactions', commonMiddlewares, getTransactions as any);
+router.get('/admin/v1/transactions', getTransactions as any);
 
 export default router;

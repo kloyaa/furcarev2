@@ -6,16 +6,18 @@ void showSnackBar(
   BuildContext context,
   String message, {
   Color color = AppColors.primary,
+  double fontSize = 9.0,
+  int duration = 3,
 }) {
   final snackBar = SnackBar(
     content: Text(
       message,
       style: GoogleFonts.urbanist(
-        fontSize: 9.0,
+        fontSize: fontSize,
       ),
     ),
     backgroundColor: color,
-    duration: const Duration(seconds: 3),
+    duration: Duration(seconds: duration),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

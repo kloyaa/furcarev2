@@ -1,4 +1,3 @@
-import { isObjectIdOrHexString } from "mongoose";
 import { statuses } from "../_core/const/api.statuses";
 import { TRequest, TResponse } from "../_core/interfaces/overrides.interface";
 import { validateCreateTransitApplication } from "../_core/validators/application.validator";
@@ -36,7 +35,7 @@ export const createTransitApplication = async (req: TRequest, res: TResponse) =>
 
         const newBooking = new Booking({
             application: newTransitApplication._id,
-            applicationType: BookingServiceType.Boarding,
+            applicationType: BookingServiceType.Transit,
             user: req.user.id,
             pet: petId,
             status: BookingStatus.Pending,

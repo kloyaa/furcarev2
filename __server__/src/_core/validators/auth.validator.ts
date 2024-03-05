@@ -46,20 +46,23 @@ export const validateEkyc = (body: any) => {
         .min(6)
         .max(255)
         .pattern(passwordRegexp)
-        .messages({ 'string.pattern.base': 'Password must contain at least 1 uppercase letter, 1 number, and 1 special character.' })
+        .messages({
+          'string.min': 'Password must be at least 6 characters long.',
+          'string.max': 'Password must be less than 76 characters.',
+          'string.pattern.base': 'Password must contain at least 1 uppercase letter, 1 number, and 1 special character.'
+        })
         .required(),
     }).required(),
     profile: Joi.object({
       firstName: Joi.string().trim().min(2).max(50).required(),
       lastName: Joi.string().trim().min(2).max(50).required(),
-      // middleName: Joi.string().trim().min(2).max(50).optional(),
       birthdate: Joi.date().iso().required(),
       address: Joi.object({
         present: Joi.string().trim().min(5).max(255),
         permanent: Joi.string().trim().min(5).max(255).optional().allow(null),
       }),
       contact: Joi.object({
-        email: Joi.string().trim().email().optional().allow(null),
+        email: Joi.string().trim().email().optional().allow(null).messages({ 'string.email': 'Invalid email format' }),
         number: Joi.string()
           .trim()
           .pattern(/^09\d{9}$/) // Pattern for a valid Philippine mobile number starting with '09'

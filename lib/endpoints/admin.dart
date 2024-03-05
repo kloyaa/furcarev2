@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:furcarev2/classes/ekyc.dart';
+import 'package:furcarev2/classes/payload.dart';
 import 'package:furcarev2/consts/api.dart';
 
 class AdminApi {
@@ -16,6 +18,58 @@ class AdminApi {
   Future<Response> getStaffs() async {
     try {
       Response response = await dio.get('/admin/v1/staffs');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> updateProfileActiveStatus(UpdateActiveStatus payload) async {
+    try {
+      Response response = await dio.put(
+        '/admin/v1/management/user-status',
+        data: payload.toJson(),
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> geCheckins() async {
+    try {
+      Response response = await dio.get('/admin/v1/stats/checkins');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> getServiceUsages() async {
+    try {
+      Response response = await dio.get('/admin/v1/stats/service-usage');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> getTransactions() async {
+    try {
+      Response response = await dio.get('/admin/v1/transactions');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> enrollment(Ekyc ekyc) async {
+    try {
+      ekyc.profile.isActive;
+      Response response = await dio.post(
+        '/auth/v1/ekyc',
+        data: ekyc.toJson(),
+      );
       return response;
     } on DioException {
       rethrow;

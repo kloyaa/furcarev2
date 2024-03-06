@@ -4,7 +4,7 @@ import { BookingStatus, UploadContentScope, UploadContentType } from "../enum/bo
 
 export const validateCreateBoardingApplication = (body: any) => {
     const { error } = Joi.object({
-        schedule: Joi.date().iso().required(),
+        schedule: Joi.date().required(),
         daysOfStay: Joi.number().required(),
         cage: Joi
             .string()
@@ -70,7 +70,7 @@ export const validateUpdateBookingStatusById = (body: any) => {
     return error;
 };
 
-export const validateUploadImages  = (body: any) => {
+export const validateUploadImages = (body: any) => {
     const { error } = Joi.object({
         uploadContentScope: Joi.string().valid(
             UploadContentScope.Avatar,

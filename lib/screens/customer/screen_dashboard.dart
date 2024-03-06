@@ -85,9 +85,18 @@ class _CustomerMainState extends State<CustomerMain> {
       List<dynamic> pets = response.data;
 
       if (pets.isEmpty) {
+        print("CustomerMain handleGetPets() pet is empty!!");
         if (context.mounted) {
           Navigator.pushReplacementNamed(context, '/c/create/profile/pet');
         }
+      }
+
+      if (context.mounted) {
+        final clientProvider = Provider.of<ClientProvider>(
+          context,
+          listen: false,
+        );
+        clientProvider.setPets(pets);
       }
     } on DioException catch (e) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);

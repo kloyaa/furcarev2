@@ -60,7 +60,7 @@ class _CreateOwnerState extends State<CreateOwner> {
 
         Future.delayed(const Duration(seconds: 2), () {
           if (context.mounted) {
-            Navigator.pushReplacementNamed(context, '/c/create/profile/pet');
+            Navigator.pushReplacementNamed(context, '/c/main');
           }
         });
       }

@@ -24,6 +24,23 @@ export const getBookings = async (req: TRequest, res: TResponse) => {
     }
 }
 
+export const getBookingsByAccessToken = async (req: TRequest, res: TResponse) => {
+    try {
+        console.log({
+            user: req.user.id,
+            status: req.query.status
+        })
+        const bookings = await Booking.find({
+            user: req.user.id,
+            status: req.query.status ?? "pending"
+        }).populate(['pet', 'staff']);;
+        return res.status(200).json(bookings);
+    } catch (error) {
+        console.log("@getBookings error", error)
+        return res.status(500).json(statuses["0900"])
+    }
+}
+
 export const getGroomingApplicationsByAppId = async (req: TRequest, res: TResponse) => {
     try {
         if (!isObjectIdOrHexString(req.params._id)) {

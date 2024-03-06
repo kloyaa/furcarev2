@@ -1,9 +1,15 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:furcarev2/classes/booking.dart';
+import 'package:furcarev2/classes/login_response.dart';
+import 'package:furcarev2/classes/pet.dart';
 import 'package:furcarev2/consts/colors.dart';
+import 'package:furcarev2/endpoints/booking.dart';
 import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/authentication.dart';
+import 'package:furcarev2/providers/client.dart';
+import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +26,12 @@ class _BookBoardingState extends State<BookBoarding> {
   late int _selectedDay;
 
   String _accessToken = "";
+  String _selectedCageId = "";
+  String _selectedDate = "";
+  String _selectedPet = "";
+  String _selectedPetId = "";
+
+  List _pets = [];
 
   Future<List<dynamic>> handleGetCages() async {
     ClientApi clientApi = ClientApi(_accessToken);
@@ -27,6 +39,111 @@ class _BookBoardingState extends State<BookBoarding> {
     Response<dynamic> response = await clientApi.getCages();
 
     return response.data;
+  }
+
+  Future<List<dynamic>> handleGetPets() async {
+    ClientApi clientApi = ClientApi(_accessToken);
+    try {
+      Response<dynamic> response = await clientApi.getMePets();
+      return response.data;
+    } on DioException catch (e) {
+      return [];
+    }
+  }
+
+  Future<void> handleSubmitBooking() async {
+    BookingApi booking = BookingApi(_accessToken);
+
+    if (_selectedCageId.isEmpty) {
+      return showSnackBar(
+        context,
+        "Please select a cage",
+        color: AppColors.danger,
+        fontSize: 10.0,
+      );
+    }
+
+    if (_selectedDate.isEmpty) {
+      return showSnackBar(
+        context,
+        "Please select a schedule",
+        color: AppColors.danger,
+        fontSize: 10.0,
+      );
+    }
+
+    if (_selectedPet.isEmpty) {
+      return showSnackBar(
+        context,
+        "Please select a pet",
+        color: AppColors.danger,
+        fontSize: 10.0,
+      );
+    }
+
+    final formattedDate = DateTime.parse(_selectedDate);
+    DateTime schedule = DateTime(
+      formattedDate.year,
+      formattedDate.month,
+      formattedDate.day,
+      _selectedTime.hour,
+      _selectedTime.minute,
+    );
+    try {
+      await booking.boardBooking(
+        BoardingPayload(
+          cage: _selectedCageId,
+          pet: _selectedPetId,
+          schedule: schedule.toUtc().toIso8601String(),
+          daysOfStay: _selectedDay,
+        ),
+      );
+
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          "Booked successfully!",
+          color: Colors.green,
+          fontSize: 10.0,
+          duration: 1,
+        );
+
+        Future.delayed(const Duration(seconds: 2), () {
+          if (context.mounted) {
+            Navigator.pushReplacementNamed(context, '/c/main');
+          }
+        });
+      }
+    } on DioException catch (e) {
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          errorResponse.message,
+          color: AppColors.danger,
+          fontSize: 10.0,
+        );
+      }
+    }
+  }
+
+  List<DropdownMenuItem<dynamic>> getPets() {
+    List<DropdownMenuItem<dynamic>> items = [];
+    for (var i = 0; i < _pets.length; i++) {
+      DropdownMenuItem item = DropdownMenuItem(
+        value: _pets[i]['_id'], // Assuming _id is the unique identifier
+        child: Text(
+          _pets[i]['name'],
+          style: GoogleFonts.urbanist(
+            fontSize: 12.0,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+
+      items.add(item);
+    }
+    return items;
   }
 
   @override
@@ -39,10 +156,16 @@ class _BookBoardingState extends State<BookBoarding> {
       listen: false,
     );
 
+    final clientProvider = Provider.of<ClientProvider>(
+      context,
+      listen: false,
+    );
+
     // Retrieve the access token from the provider and assign it to _accessToken
     _accessToken = accessTokenProvider.authToken?.accessToken ?? '';
     _selectedTime = const TimeOfDay(hour: 7, minute: 0);
     _selectedDay = 1;
+    _pets = clientProvider.pets ?? [];
   }
 
   @override
@@ -82,7 +205,7 @@ class _BookBoardingState extends State<BookBoarding> {
                   value: const [],
                   onValueChanged: (dates) {
                     final String date = dates[0]!.toIso8601String();
-                    // _selectedBirthdate = date.substring(0, 10);
+                    _selectedDate = date.substring(0, 10);
                   },
                 )),
             const SizedBox(height: 10.0),
@@ -114,7 +237,8 @@ class _BookBoardingState extends State<BookBoarding> {
                               child: Text(
                                 _formatTime(hour),
                                 style: GoogleFonts.urbanist(
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             );
@@ -151,12 +275,37 @@ class _BookBoardingState extends State<BookBoarding> {
                               child: Text(
                                 "$day day(s)",
                                 style: GoogleFonts.urbanist(
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             );
                           },
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10.0),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(5.0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Center(
+                      child: DropdownButton<dynamic>(
+                        value: _selectedPet.isNotEmpty ? _selectedPet : null,
+                        underline: const SizedBox(),
+                        onChanged: (dynamic newValue) {
+                          setState(() {
+                            _selectedPet = newValue!;
+                            _selectedPetId = newValue;
+                          });
+                        },
+                        items: getPets(),
                       ),
                     ),
                   ),
@@ -185,22 +334,38 @@ class _BookBoardingState extends State<BookBoarding> {
                         opacity: snapshot.data?[index]['available'] ? 1 : 0.3,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color:
+                                _selectedCageId == snapshot.data?[index]['_id']
+                                    ? Colors.purple
+                                    : Colors.white,
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           margin: const EdgeInsets.only(bottom: 5.0),
                           child: ListTile(
+                            onTap: () {
+                              setState(() {
+                                _selectedCageId = snapshot.data?[index]['_id'];
+                              });
+                            },
                             title: Text(
                               snapshot.data?[index]['title'],
                               style: GoogleFonts.urbanist(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.bold,
+                                color: _selectedCageId ==
+                                        snapshot.data?[index]['_id']
+                                    ? Colors.white
+                                    : AppColors.primary,
                               ),
                             ),
                             trailing: Text(
                               "${snapshot.data?[index]['used']}/${snapshot.data?[index]['limit']}",
                               style: GoogleFonts.urbanist(
                                 fontSize: 12.0,
+                                color: _selectedCageId ==
+                                        snapshot.data?[index]['_id']
+                                    ? Colors.white
+                                    : AppColors.primary,
                               ),
                             ),
                           ),
@@ -214,7 +379,7 @@ class _BookBoardingState extends State<BookBoarding> {
             const SizedBox(height: 10.0),
             ElevatedButton(
               onPressed: () async {
-                // handleCreatePet();
+                handleSubmitBooking();
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -228,7 +393,7 @@ class _BookBoardingState extends State<BookBoarding> {
                 height: 50,
                 child: Center(
                   child: Text(
-                    'Submit',
+                    'Next',
                     style: GoogleFonts.urbanist(
                       color: AppColors.secondary,
                       fontSize: 12.0,

@@ -24,6 +24,15 @@ class ClientApi {
     }
   }
 
+  Future<Response> getCages() async {
+    try {
+      Response response = await dio.get('/cage/v1');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> getMePets() async {
     try {
       Response response = await dio.get('/pet/v1/me');

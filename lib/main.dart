@@ -12,6 +12,9 @@ import 'package:furcarev2/screens/admin/screen_staff_management.dart';
 import 'package:furcarev2/screens/auth/login/screen_admin_login.dart';
 import 'package:furcarev2/screens/auth/login/screen_customer_login.dart';
 import 'package:furcarev2/screens/auth/register/screen_customer_registration.dart';
+import 'package:furcarev2/screens/customer/booking/board.dart';
+import 'package:furcarev2/screens/customer/booking/grooming.dart';
+import 'package:furcarev2/screens/customer/booking/transit.dart';
 import 'package:furcarev2/screens/customer/screen_edit_owner.dart';
 import 'package:furcarev2/screens/customer/screen_edit_profile_1.dart';
 import 'package:furcarev2/screens/customer/screen_acitivity.dart';
@@ -75,6 +78,10 @@ class MyApp extends StatelessWidget {
           '/a/report/transactions': (context) => const Transactions(),
 
           '/a/profile': (context) => const AdminProfile(),
+
+          '/book/boarding': (context) => const BookBoarding(),
+          '/book/transit': (context) => const BookTransit(),
+          '/book/grooming': (context) => const BookGrooming(),
         },
       ),
     );

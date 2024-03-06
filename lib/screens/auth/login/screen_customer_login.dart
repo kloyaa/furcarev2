@@ -4,6 +4,7 @@ import 'package:furcarev2/classes/login_response.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/auth.dart';
 import 'package:furcarev2/providers/authentication.dart';
+import 'package:furcarev2/services/location_permission.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
@@ -90,6 +91,16 @@ class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
     }
   }
 
+  Future<void> _requestPermission() async {
+    bool granted =
+        await LocationPermissionHandler.requestLocationPermission(context);
+    if (granted) {
+      // Location permission granted, proceed with your logic
+    } else {
+      // Location permission denied, handle accordingly
+    }
+  }
+
   @override
   void initState() {
     _usernameFocus = FocusNode();
@@ -98,6 +109,8 @@ class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
     _usernameController.text = "customer01";
     _passwordController.text = "Password@1234";
     super.initState();
+
+    _requestPermission();
   }
 
   @override

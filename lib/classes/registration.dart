@@ -41,8 +41,8 @@ class Address {
 
   factory Address.fromJson(Map<String, dynamic> json) {
     return Address(
-      present: json['address']['present'],
-      permanent: json['address']['permanent'],
+      present: json['present'],
+      permanent: json['permanent'],
     );
   }
 
@@ -65,8 +65,8 @@ class Contact {
 
   factory Contact.fromJson(Map<String, dynamic> json) {
     return Contact(
-      email: json['contact']['email'],
-      number: json['contact']['number'],
+      email: json['email'],
+      number: json['number'],
     );
   }
 

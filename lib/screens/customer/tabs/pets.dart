@@ -52,7 +52,7 @@ class _CustomerTabPetsState extends State<CustomerTabPets> {
         backgroundColor: AppColors.secondary,
         floatingActionButton: IconButton(
           onPressed: () {
-            Navigator.of(context).pushReplacementNamed("/c/create/profile/pet");
+            Navigator.of(context).pushNamed("/c/add/pet");
           },
           icon: const Icon(
             Ionicons.add_outline,

@@ -598,7 +598,7 @@ class _AdminCustomerManagementState extends State<AdminCustomerManagement> {
                                       ),
                                       Text(
                                         customer['profile']['address']
-                                            ['present'],
+                                            ['permanent'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,

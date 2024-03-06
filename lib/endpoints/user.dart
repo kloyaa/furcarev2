@@ -57,6 +57,18 @@ class ClientApi {
     }
   }
 
+  Future<Response> updateOwner(OwnerProfilePayload payload) async {
+    try {
+      Response response = await dio.put(
+        '/owner/v1/me',
+        data: payload.toJson(),
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> getMeOwnerProfile() async {
     try {
       Response response = await dio.get('/owner/v1/me');
@@ -72,6 +84,27 @@ class ClientApi {
         '/user/v1/profile/me',
         data: profile,
       );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> updateeMeProfile(Map profile) async {
+    try {
+      Response response = await dio.put(
+        '/user/v1/profile/me',
+        data: profile,
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> getMeActivityLog() async {
+    try {
+      Response response = await dio.get('/activity/v1/me');
       return response;
     } on DioException {
       rethrow;

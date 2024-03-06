@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:furcarev2/classes/client.dart';
+import 'package:furcarev2/classes/customer.dart';
 import 'package:furcarev2/classes/login_response.dart';
 import 'package:furcarev2/classes/owner.dart';
 import 'package:furcarev2/classes/pet.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/authentication.dart';
+import 'package:furcarev2/providers/client.dart';
 import 'package:furcarev2/screens/customer/tabs/bookings.dart';
 import 'package:furcarev2/screens/customer/tabs/dashboard.dart';
 import 'package:furcarev2/screens/customer/tabs/pets.dart';
@@ -31,12 +34,45 @@ class _CustomerMainState extends State<CustomerMain> {
     ClientApi clientApi = ClientApi(_accessToken);
     try {
       Response<dynamic> response = await clientApi.getMeOwnerProfile();
-      OwnerProfile ownerProfile = OwnerProfile.fromJson(response.data);
+      Owner ownerProfile = Owner.fromJson(response.data);
+
+      if (context.mounted) {
+        final clientProvider = Provider.of<ClientProvider>(
+          context,
+          listen: false,
+        );
+
+        clientProvider.setOwner(ownerProfile);
+      }
     } on DioException catch (e) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
       if (errorResponse.code == "99000") {
         if (context.mounted) {
           Navigator.pushReplacementNamed(context, '/c/create/profile/owner');
+        }
+      }
+    }
+  }
+
+  Future<void> handleGetProfile() async {
+    ClientApi clientApi = ClientApi(_accessToken);
+    try {
+      Response<dynamic> response = await clientApi.getMeProfile();
+      Profile profile = Profile.fromJson(response.data);
+
+      if (context.mounted) {
+        final clientProvider = Provider.of<ClientProvider>(
+          context,
+          listen: false,
+        );
+
+        clientProvider.setProfile(profile);
+      }
+    } on DioException catch (e) {
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
+      if (errorResponse.code == "99000") {
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, '/c/create/profile');
         }
       }
     }
@@ -73,6 +109,7 @@ class _CustomerMainState extends State<CustomerMain> {
 
     handleGetOwnerProfile();
     handleGetPets();
+    handleGetProfile();
   }
 
   @override

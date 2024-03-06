@@ -23,6 +23,12 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
         child: ListView(
           children: [
             ListTile(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/c/edit/profile/1',
+                );
+              },
               leading: const Icon(
                 Ionicons.person_outline,
                 color: AppColors.primary,
@@ -44,11 +50,16 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
                 ),
               ),
               tileColor: Colors.white,
-              onLongPress: () {},
               // Add any other content you want here
             ),
             const SizedBox(height: 10.0),
             ListTile(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/c/edit/profile/owner',
+                );
+              },
               leading: const Icon(
                 Ionicons.paw_outline,
                 color: AppColors.primary,
@@ -70,11 +81,16 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
                 ),
               ),
               tileColor: Colors.white,
-              onLongPress: () {},
               // Add any other content you want here
             ),
             const SizedBox(height: 10.0),
             ListTile(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/c/activity',
+                );
+              },
               leading: const Icon(
                 Ionicons.list_outline,
                 color: AppColors.primary,
@@ -123,7 +139,7 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
               ),
               tileColor: Colors.white,
               onTap: () {
-                Navigator.pushNamed(
+                Navigator.pushReplacementNamed(
                   context,
                   '/',
                 );

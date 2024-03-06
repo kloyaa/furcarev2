@@ -42,4 +42,15 @@ class Profile {
       'contact': contact.toJson(),
     };
   }
+
+  Map<String, dynamic> updateToJson() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'birthdate': birthdate,
+      'gender': gender,
+      'address': address.toJson(),
+      'contact': contact.toJson(),
+    };
+  }
 }

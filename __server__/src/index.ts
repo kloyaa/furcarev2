@@ -5,6 +5,7 @@ import { connectDB } from './_core/utils/db/db.util';
 import { getEnv } from './_core/config/env.config';
 import { maintenanceModeMiddleware } from './_core/middlewares/maintenance-mode.middleware';
 
+import activityRoute from './routes/activity.route';
 import authRoute from './routes/auth.route';
 import userRoute from './routes/user.route';
 import ownerRoute from './routes/pet_owner.route';
@@ -57,6 +58,7 @@ async function runApp() {
   app.use('/api', transitApplicationRoute);
   app.use('/api', bookingRoute);
   app.use('/api', uploadRoute);
+  app.use('/api', activityRoute);
 
   connectDB();
 

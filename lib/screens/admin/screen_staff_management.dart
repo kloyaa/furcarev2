@@ -609,7 +609,8 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                         ),
                                       ),
                                       Text(
-                                        staff['profile']['address']['present'],
+                                        staff['profile']['address']
+                                            ['permanent'],
                                         style: GoogleFonts.urbanist(
                                           fontSize: 14.0,
                                           color: AppColors.primary,

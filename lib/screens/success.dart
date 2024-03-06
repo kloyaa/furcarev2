@@ -28,7 +28,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 3500), () {
+    Future.delayed(const Duration(milliseconds: 3000), () {
       Navigator.of(context).pushReplacementNamed(widget.redirectPath);
     });
   }

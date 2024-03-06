@@ -95,7 +95,7 @@ class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
     _usernameFocus = FocusNode();
     _passwordFocus = FocusNode();
 
-    _usernameController.text = "kolya01";
+    _usernameController.text = "customer01";
     _passwordController.text = "Password@1234";
     super.initState();
   }

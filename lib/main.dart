@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furcarev2/providers/authentication.dart';
+import 'package:furcarev2/providers/client.dart';
 import 'package:furcarev2/providers/registration.dart';
 import 'package:furcarev2/screens/admin/reports/screen_checkins.dart';
 import 'package:furcarev2/screens/admin/reports/screen_service_usage.dart';
@@ -11,11 +12,16 @@ import 'package:furcarev2/screens/admin/screen_staff_management.dart';
 import 'package:furcarev2/screens/auth/login/screen_admin_login.dart';
 import 'package:furcarev2/screens/auth/login/screen_customer_login.dart';
 import 'package:furcarev2/screens/auth/register/screen_customer_registration.dart';
+import 'package:furcarev2/screens/customer/screen_edit_owner.dart';
+import 'package:furcarev2/screens/customer/screen_edit_profile_1.dart';
+import 'package:furcarev2/screens/customer/screen_acitivity.dart';
+import 'package:furcarev2/screens/customer/screen_add_pet.dart';
 import 'package:furcarev2/screens/customer/screen_create_owner.dart';
 import 'package:furcarev2/screens/customer/screen_create_pet.dart';
 import 'package:furcarev2/screens/customer/screen_create_profile_2.dart';
 import 'package:furcarev2/screens/customer/screen_dashboard.dart';
 import 'package:furcarev2/screens/customer/screen_create_profile_1.dart';
+import 'package:furcarev2/screens/customer/screen_edit_profile_2.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -34,6 +40,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthTokenProvider()),
         ChangeNotifierProvider(create: (_) => RegistrationProvider()),
+        ChangeNotifierProvider(create: (_) => ClientProvider()),
       ],
       child: MaterialApp(
         title: 'Furcare v2',
@@ -49,8 +56,13 @@ class MyApp extends StatelessWidget {
           '/c/main': (context) => const CustomerMain(), // for admin
           '/c/create/profile/1': (context) => const CreateProfileStep1(),
           '/c/create/profile/2': (context) => const CreateProfileStep2(),
+          '/c/edit/profile/owner': (context) => const EditOwner(),
+          '/c/edit/profile/1': (context) => const EditProfileStep1(),
+          '/c/edit/profile/2': (context) => const EditProfileStep2(),
           '/c/create/profile/owner': (context) => const CreateOwner(),
           '/c/create/profile/pet': (context) => const CreatePet(),
+          '/c/add/pet': (context) => const AddNewPet(),
+          '/c/activity': (context) => const CustomerActivityLog(),
 
           // When navigating to the "/second" route, build the SecondScreen widget.
           '/a/management/staff': (context) => const AdminStaffManagement(),

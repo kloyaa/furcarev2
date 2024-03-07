@@ -30,10 +30,13 @@ export const getBookingsByAccessToken = async (req: TRequest, res: TResponse) =>
             user: req.user.id,
             status: req.query.status
         })
-        const bookings = await Booking.find({
+        const bookings = await Booking
+        .find({
             user: req.user.id,
             status: req.query.status ?? "pending"
-        }).populate(['pet', 'staff']);;
+        })
+        .populate(['pet', 'staff'])
+        .sort({ createdAt: 'desc' });
         return res.status(200).json(bookings);
     } catch (error) {
         console.log("@getBookings error", error)

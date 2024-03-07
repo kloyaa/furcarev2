@@ -97,8 +97,8 @@ class _CustomerTabPetsState extends State<CustomerTabPets> {
                         leading: Icon(
                           Ionicons.paw,
                           color: pet['gender'] == "male"
-                              ? Colors.blue
-                              : Colors.purple,
+                              ? Colors.blueGrey
+                              : Colors.pink,
                         ),
                         title: Text(
                           "${pet['name']} (${pet['specie']})",

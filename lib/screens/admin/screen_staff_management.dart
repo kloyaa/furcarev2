@@ -22,6 +22,7 @@ class AdminStaffManagement extends StatefulWidget {
 class _AdminStaffManagementState extends State<AdminStaffManagement> {
   // State
   String _accessToken = "";
+  late Future<List<dynamic>> _staffsFuture;
 
   Future<List<dynamic>> handleGetStaffs() async {
     AdminApi adminApi = AdminApi(_accessToken);
@@ -62,6 +63,36 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
     }
   }
 
+  Future<void> handeDeleteUser(String id) async {
+    AdminApi adminApi = AdminApi(_accessToken);
+    try {
+      await adminApi.deleteUser(id);
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          "Deleted successfully!",
+          color: Colors.green,
+          fontSize: 14.0,
+          duration: 1,
+        );
+      }
+
+      setState(() {
+        _staffsFuture = handleGetStaffs(); // Call handleGetStaffs() again
+      });
+    } on DioException catch (e) {
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
+      if (context.mounted) {
+        showSnackBar(
+          context,
+          errorResponse.message,
+          color: AppColors.danger,
+          fontSize: 14.0,
+        );
+      }
+    }
+  }
+
   @override
   void initState() {
     final accessTokenProvider = Provider.of<AuthTokenProvider>(
@@ -71,6 +102,8 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
 
     // Retrieve the access token from the provider and assign it to _accessToken
     _accessToken = accessTokenProvider.authToken?.accessToken ?? '';
+    _staffsFuture = handleGetStaffs();
+
     super.initState();
   }
 
@@ -259,7 +292,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
           margin: const EdgeInsets.all(20.0),
           width: MediaQuery.of(context).size.width * 0.50,
           child: FutureBuilder<List<dynamic>>(
-            future: handleGetStaffs(),
+            future: _staffsFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -665,9 +698,7 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                   const SizedBox(width: 10.0),
                                   OutlinedButton(
                                     onPressed: () async {
-                                      if (context.mounted) {
-                                        // handleSaveBasicInfo();
-                                      }
+                                      handeDeleteUser(staff['_id']);
                                     },
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: Colors.red,

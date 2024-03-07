@@ -9,6 +9,7 @@ import 'package:furcarev2/endpoints/booking.dart';
 import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/client.dart';
+import 'package:furcarev2/screens/customer/payment/preview.dart';
 import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,13 +25,11 @@ class _BookBoardingState extends State<BookBoarding> {
   // State
   late TimeOfDay _selectedTime;
   late int _selectedDay;
-
   String _accessToken = "";
   String _selectedCageId = "";
   String _selectedDate = "";
   String _selectedPet = "";
   String _selectedPetId = "";
-
   List _pets = [];
 
   Future<List<dynamic>> handleGetCages() async {
@@ -90,7 +89,7 @@ class _BookBoardingState extends State<BookBoarding> {
       _selectedTime.minute,
     );
     try {
-      await booking.boardBooking(
+      Response<dynamic> response = await booking.boardBooking(
         BoardingPayload(
           cage: _selectedCageId,
           pet: _selectedPetId,
@@ -108,11 +107,16 @@ class _BookBoardingState extends State<BookBoarding> {
           duration: 1,
         );
 
-        Future.delayed(const Duration(seconds: 2), () {
-          if (context.mounted) {
-            Navigator.pushReplacementNamed(context, '/c/main');
-          }
-        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentPreview(
+              serviceName: "boarding",
+              date: response.data['date'],
+              referenceNo: response.data['referenceNo'],
+            ),
+          ),
+        );
       }
     } on DioException catch (e) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
@@ -393,7 +397,7 @@ class _BookBoardingState extends State<BookBoarding> {
                 height: 50,
                 child: Center(
                   child: Text(
-                    'Next',
+                    'Submit',
                     style: GoogleFonts.urbanist(
                       color: AppColors.secondary,
                       fontSize: 12.0,

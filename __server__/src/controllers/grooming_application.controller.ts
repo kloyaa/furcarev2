@@ -50,7 +50,10 @@ export const createGroomingApplication = async (req: TRequest, res: TResponse) =
             description: ActivityType.SERVICE_GROOMING_CREATED,
         } as IActivity);
 
-        return res.status(201).json(statuses["00"]);
+        return res.status(200).json({
+            referenceNo: newBooking._id,
+            date: new Date()
+        })
     } catch (error) {
         console.error('@createGroomingApplication', error);
         return res.status(500).json(statuses["0900"]);

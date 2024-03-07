@@ -1,4 +1,4 @@
-import { Aggregate } from "mongoose";
+import { Aggregate, isObjectIdOrHexString } from "mongoose";
 import { TRequest, TResponse } from "../_core/interfaces/overrides.interface";
 import { type Response } from 'express';
 import User from "../models/user.schema";
@@ -10,6 +10,9 @@ import { validateUpdateUserActiveStatus } from "../_core/validators/user.validat
 import BoardingApplication from "../models/boarding_application.schema";
 import TransitApplication from "../models/transit_application.schema";
 import GroomingApplication from "../models/grooming_application.schema";
+import Booking from "../models/booking.schema";
+import Upload from "../models/upload.schema";
+import UserRole from "../models/user_role.schema";
 
 export const getCustomers = async (req: TRequest, res: Response) => {
     try {
@@ -278,7 +281,7 @@ export const getSeriveUsageStats = async (req: TRequest, res: TResponse) => {
             getAggregateResult(GroomingApplication)
         ]);
 
-        console.log({boardingStats, transitStats, groomingStats})
+        console.log({ boardingStats, transitStats, groomingStats })
 
         const formatResult = (stats: any[]) => {
             return stats.length > 0 ? stats[0].total : 0;
@@ -317,6 +320,33 @@ export const updateUserActiveStatus = async (req: TRequest, res: Response) => {
         return res.status(200).json(statuses["00"]);
     } catch (error) {
         console.log('@getCheckInStats error', error);
+        return res.status(500).json(statuses['0900']);
+    }
+}
+
+export const removeUser = async (req: TRequest, res: Response) => {
+    try {
+        const user = req.params._id;
+
+        if(!user) {
+            return res.status(400).json(statuses["501"]);
+        }
+        if(!isObjectIdOrHexString(user)) {
+            return res.status(400).json(statuses["0901"]);
+        }
+
+        await Promise.all([
+            User.deleteMany({ _id: user }),
+            Profile.deleteMany({ user }),
+            Activity.deleteMany({ user }),
+            Booking.deleteMany({ user }),
+            Upload.deleteMany({ user }),
+            UserRole.deleteMany({ user }),
+        ]);
+
+        return res.status(200).json(statuses["00"]);
+    } catch (error) {
+        console.log('@removeUser error', error);
         return res.status(500).json(statuses['0900']);
     }
 }

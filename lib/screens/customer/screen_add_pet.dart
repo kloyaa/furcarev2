@@ -509,22 +509,12 @@ class _AddNewPetState extends State<AddNewPet> {
                   width: double.infinity,
                   height: 50,
                   child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Save',
-                          style: GoogleFonts.urbanist(
-                            color: AppColors.secondary,
-                            fontSize: 12.0,
-                          ),
-                        ),
-                        const SizedBox(width: 2.0),
-                        const Icon(
-                          Ionicons.checkbox_outline,
-                          size: 12,
-                        )
-                      ],
+                    child: Text(
+                      'Save',
+                      style: GoogleFonts.urbanist(
+                        color: AppColors.secondary,
+                        fontSize: 12.0,
+                      ),
                     ),
                   ),
                 ),

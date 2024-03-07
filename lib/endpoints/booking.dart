@@ -26,6 +26,31 @@ class BookingApi {
     }
   }
 
+  Future<Response> groomingBooking(GroomingPayload payload) async {
+    try {
+      Response response = await dio.post(
+        '/application/v1/grooming',
+        data: payload.toJson(),
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> transitBooking(TransitgPayload payload) async {
+    try {
+      Response response = await dio.post(
+        '/application/v1/transit',
+        data: payload.toJson(),
+      );
+
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> getBookingsByAccessToken(String status) async {
     try {
       Response response = await dio.get(

@@ -33,6 +33,15 @@ class AdminApi {
     }
   }
 
+  Future<Response> deleteUser(String id) async {
+    try {
+      Response response = await dio.delete('/admin/v1/remove/user/$id');
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> updateProfileActiveStatus(UpdateActiveStatus payload) async {
     try {
       Response response = await dio.put(

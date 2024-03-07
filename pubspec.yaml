@@ -46,6 +46,8 @@ dependencies:
   salomon_bottom_bar: ^3.3.2
   toggle_switch: ^2.1.0
   permission_handler: ^11.3.0
+  flutter_phone_direct_caller: ^2.1.1
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +80,7 @@ flutter:
     - assets/img_2.jpg
     - assets/img_3.jpg
     - assets/img_4.jpg
+    - assets/image_placeholder.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

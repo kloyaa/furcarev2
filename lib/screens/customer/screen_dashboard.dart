@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:furcarev2/classes/client.dart';
 import 'package:furcarev2/classes/customer.dart';
 import 'package:furcarev2/classes/login_response.dart';
-import 'package:furcarev2/classes/owner.dart';
-import 'package:furcarev2/classes/pet.dart';
 import 'package:furcarev2/consts/colors.dart';
+import 'package:furcarev2/endpoints/app.dart';
 import 'package:furcarev2/endpoints/user.dart';
+import 'package:furcarev2/providers/app.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/client.dart';
 import 'package:furcarev2/screens/customer/tabs/bookings.dart';
@@ -85,7 +85,6 @@ class _CustomerMainState extends State<CustomerMain> {
       List<dynamic> pets = response.data;
 
       if (pets.isEmpty) {
-        print("CustomerMain handleGetPets() pet is empty!!");
         if (context.mounted) {
           Navigator.pushReplacementNamed(context, '/c/create/profile/pet');
         }
@@ -97,6 +96,24 @@ class _CustomerMainState extends State<CustomerMain> {
           listen: false,
         );
         clientProvider.setPets(pets);
+      }
+    } on DioException catch (e) {
+      ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
+    }
+  }
+
+  Future<void> handleGetServiceFees() async {
+    AppApi appApi = AppApi(_accessToken);
+    try {
+      Response<dynamic> response = await appApi.getServiceFees();
+      List<dynamic> serviceFees = response.data;
+
+      if (context.mounted) {
+        final appProvider = Provider.of<AppProvider>(
+          context,
+          listen: false,
+        );
+        appProvider.setServiceFees(serviceFees);
       }
     } on DioException catch (e) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(e.response?.data);
@@ -119,6 +136,7 @@ class _CustomerMainState extends State<CustomerMain> {
     handleGetOwnerProfile();
     handleGetPets();
     handleGetProfile();
+    handleGetServiceFees();
   }
 
   @override

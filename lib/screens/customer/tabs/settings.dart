@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:furcarev2/consts/colors.dart';
+import 'package:furcarev2/consts/config.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -112,10 +114,37 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
                 ),
               ),
               tileColor: Colors.white,
-              onLongPress: () {},
               // Add any other content you want here
             ),
-            const SizedBox(height: 200.0),
+            const SizedBox(height: 150.0),
+            ListTile(
+              leading: const Icon(
+                Ionicons.call_outline,
+                color: AppColors.primary,
+                size: 18.0,
+              ),
+              title: Text(
+                'Call us',
+                style: GoogleFonts.urbanist(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
+              ),
+              subtitle: Text(
+                'Any concerns?',
+                style: GoogleFonts.urbanist(
+                  color: AppColors.primary,
+                  fontSize: 10.0,
+                ),
+              ),
+              tileColor: Colors.white,
+              onTap: () async {
+                await FlutterPhoneDirectCaller.callNumber(furcareContactNo);
+              },
+              // Add any other content you want here
+            ),
+            const SizedBox(height: 10.0),
             ListTile(
               leading: const Icon(
                 Ionicons.log_out_outline,

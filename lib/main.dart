@@ -12,6 +12,7 @@ import 'package:furcarev2/screens/admin/screen_staff_enrollment.dart';
 import 'package:furcarev2/screens/admin/screen_staff_management.dart';
 import 'package:furcarev2/screens/auth/login/screen_admin_login.dart';
 import 'package:furcarev2/screens/auth/login/screen_customer_login.dart';
+import 'package:furcarev2/screens/auth/login/screen_staff_login.dart';
 import 'package:furcarev2/screens/auth/register/screen_customer_registration.dart';
 import 'package:furcarev2/screens/customer/booking/board.dart';
 import 'package:furcarev2/screens/customer/booking/grooming.dart';
@@ -56,7 +57,8 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => const ScreenAdminLogin(), // for admin
+          // '/': (context) => const ScreenAdminLogin(), // for admin
+          '/': (context) => const ScreenStaffLogin(), // for staff
           // '/': (context) => const ScreenCustomerLogin(), // for customer
 
           '/c/register': (context) => const ScreenCustomerRegister(),

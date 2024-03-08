@@ -9,14 +9,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
-class ScreenCustomerLogin extends StatefulWidget {
-  const ScreenCustomerLogin({super.key});
+class ScreenStaffLogin extends StatefulWidget {
+  const ScreenStaffLogin({super.key});
 
   @override
-  State<ScreenCustomerLogin> createState() => _ScreenCustomerLoginState();
+  State<ScreenStaffLogin> createState() => _ScreenStaffLoginState();
 }
 
-class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
+class _ScreenStaffLoginState extends State<ScreenStaffLogin> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   late final FocusNode _usernameFocus;
@@ -62,7 +62,7 @@ class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
         return;
       }
 
-      if (role == "staff") {
+      if (role == "customer") {
         setState(() {
           _isLoginError = true;
           _loginErrorMessage =
@@ -117,8 +117,8 @@ class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
     _usernameFocus = FocusNode();
     _passwordFocus = FocusNode();
 
-    _usernameController.text = "customer01";
-    _passwordController.text = "Password@1234";
+    _usernameController.text = "Staff05";
+    _passwordController.text = "Password@123";
     super.initState();
 
     _requestPermission();
@@ -284,34 +284,6 @@ class _ScreenCustomerLoginState extends State<ScreenCustomerLogin> {
                         'Sign in',
                         style: GoogleFonts.urbanist(
                           color: AppColors.secondary,
-                          fontSize: 12.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10.0),
-                OutlinedButton(
-                  onPressed: () async {
-                    Navigator.pushNamed(context, "/c/register");
-                  },
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      color: AppColors.primary.withOpacity(0.3),
-                      width: 0.5,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  ),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 50,
-                    child: Center(
-                      child: Text(
-                        "Don't have an account?",
-                        style: GoogleFonts.urbanist(
-                          color: AppColors.primary,
                           fontSize: 12.0,
                         ),
                       ),

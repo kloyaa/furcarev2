@@ -43,10 +43,11 @@ class _ScreenAdminLoginState extends State<ScreenAdminLogin> {
         password: password,
       );
 
-      if (response.data["role"].toString().toLowerCase() != "administrator") {
+      String role = response.data["role"].toString().toLowerCase();
+      if (role == "staff" || role == "customer") {
         setState(() {
           _isLoginError = true;
-          _loginErrorMessage = "Please use the Furcare mobile app, Thank you.";
+          _loginErrorMessage = "Please use the Furcare Mobile app, Thank you.";
         });
 
         return;

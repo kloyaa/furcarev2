@@ -28,6 +28,12 @@ import 'package:furcarev2/screens/customer/screen_create_profile_2.dart';
 import 'package:furcarev2/screens/customer/screen_dashboard.dart';
 import 'package:furcarev2/screens/customer/screen_create_profile_1.dart';
 import 'package:furcarev2/screens/customer/screen_edit_profile_2.dart';
+import 'package:furcarev2/screens/staff/screen_dashboard.dart';
+import 'package:furcarev2/screens/staff/screen_edit_profile_1.dart';
+import 'package:furcarev2/screens/staff/screen_edit_profile_2.dart';
+import 'package:furcarev2/screens/staff/tabs/preview/boarding.dart';
+import 'package:furcarev2/screens/staff/tabs/preview/grooming.dart';
+import 'package:furcarev2/screens/staff/tabs/preview/transit.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -72,6 +78,13 @@ class MyApp extends StatelessWidget {
           '/c/create/profile/pet': (context) => const CreatePet(),
           '/c/add/pet': (context) => const AddNewPet(),
           '/c/activity': (context) => const CustomerActivityLog(),
+
+          '/s/main': (context) => const StaffMain(), // for admin
+          '/s/edit/profile/1': (context) => const StaffEditProfileStep1(),
+          '/s/edit/profile/2': (context) => const StaffEditProfileStep2(),
+          '/s/preview/boarding': (context) => const PreviewBoarding(),
+          '/s/preview/transit': (context) => const PreviewTransit(),
+          '/s/preview/grooming': (context) => const PreviewGrooming(),
 
           '/a/management/staff': (context) => const AdminStaffManagement(),
           '/a/management/staff/enrollment': (context) =>

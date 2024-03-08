@@ -80,7 +80,7 @@ class _ScreenStaffLoginState extends State<ScreenStaffLogin> {
       if (loginResponse.code == "00") {
         if (context.mounted) {
           accessTokenProvider.setAuthToken(loginResponse.accessToken);
-          Navigator.pushReplacementNamed(context, '/c/main');
+          Navigator.pushReplacementNamed(context, '/s/main');
         }
       }
     } on DioException catch (e) {

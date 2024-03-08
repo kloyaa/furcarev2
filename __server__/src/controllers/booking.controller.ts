@@ -9,20 +9,40 @@ import { BookingStatus } from "../_core/enum/booking.enum";
 import { EventName } from "../_core/enum/activity.enum";
 import { emitter } from "../_core/events/activity.event";
 import { IActivity } from "../_core/interfaces/activity.interface";
-import serviceTransaction from "../models/service_transactions.schema";
 import ServiceTransaction from "../models/service_transactions.schema";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
-import ServiceFee from "../models/service_fee.schema";
 
 export const getBookings = async (req: TRequest, res: TResponse) => {
     try {
-        const bookings = await Booking.find();
+        const status = req.query.status ?? "pending";
+
+        const bookings = await Booking.aggregate([
+            {
+                $match: { status }
+            },
+            {
+                $lookup: {
+                    from: "profiles",
+                    localField: "user",
+                    foreignField: "user",
+                    as: "profile"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$profile",
+                    preserveNullAndEmptyArrays: true
+                }
+            }
+        ]);
+
         return res.status(200).json(bookings);
     } catch (error) {
-        console.log("@getBookings error", error)
-        return res.status(500).json(statuses["0900"])
+        console.error("@getBookings error", error);
+        return res.status(500).json(statuses["0900"]);
     }
 }
+
 
 export const getBookingsByAccessToken = async (req: TRequest, res: TResponse) => {
     try {

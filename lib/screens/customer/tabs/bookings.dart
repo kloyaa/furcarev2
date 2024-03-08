@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/booking.dart';
-import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/enums/enum.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:google_fonts/google_fonts.dart';

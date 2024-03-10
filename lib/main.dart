@@ -34,6 +34,9 @@ import 'package:furcarev2/screens/staff/screen_edit_profile_2.dart';
 import 'package:furcarev2/screens/staff/tabs/preview/boarding.dart';
 import 'package:furcarev2/screens/staff/tabs/preview/grooming.dart';
 import 'package:furcarev2/screens/staff/tabs/preview/transit.dart';
+import 'package:furcarev2/screens/staff/tabs/preview_inprogress_bookings/boarding.dart';
+import 'package:furcarev2/screens/staff/tabs/preview_inprogress_bookings/grooming.dart';
+import 'package:furcarev2/screens/staff/tabs/preview_inprogress_bookings/transit.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -82,9 +85,17 @@ class MyApp extends StatelessWidget {
           '/s/main': (context) => const StaffMain(), // for admin
           '/s/edit/profile/1': (context) => const StaffEditProfileStep1(),
           '/s/edit/profile/2': (context) => const StaffEditProfileStep2(),
+
           '/s/preview/boarding': (context) => const PreviewBoarding(),
           '/s/preview/transit': (context) => const PreviewTransit(),
           '/s/preview/grooming': (context) => const PreviewGrooming(),
+
+          '/s/preview-inprogress/boarding': (context) =>
+              const PreviewInprogressBoarding(),
+          '/s/preview-inprogress/transit': (context) =>
+              const PreviewInprogressTransit(),
+          '/s/preview-inprogress/grooming': (context) =>
+              const PreviewInprogressGrooming(),
 
           '/a/management/staff': (context) => const AdminStaffManagement(),
           '/a/management/staff/enrollment': (context) =>

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:furcarev2/classes/booking.dart';
 import 'package:furcarev2/consts/api.dart';
 
 class StaffApi {
@@ -20,6 +21,19 @@ class StaffApi {
         queryParameters: {
           'status': status,
         },
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> updateBookingStatus(
+      UpdateBookingStatusPayload payload) async {
+    try {
+      Response response = await dio.put(
+        '/staff/v1/booking/status',
+        data: payload.toJson(),
       );
       return response;
     } on DioException {

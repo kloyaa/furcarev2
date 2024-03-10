@@ -7,21 +7,22 @@ import 'package:furcarev2/endpoints/booking.dart';
 import 'package:furcarev2/endpoints/staff.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/screens/success.dart';
-import 'package:furcarev2/utils/common.util.dart';
 import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class PreviewTransit extends StatefulWidget {
-  const PreviewTransit({super.key});
+class PreviewInprogressBoarding extends StatefulWidget {
+  const PreviewInprogressBoarding({super.key});
 
   @override
-  State<PreviewTransit> createState() => _PreviewTransitState();
+  State<PreviewInprogressBoarding> createState() =>
+      _PreviewInprogressBoardingState();
 }
 
-class _PreviewTransitState extends State<PreviewTransit> {
+class _PreviewInprogressBoardingState extends State<PreviewInprogressBoarding> {
   // State
   String _accessToken = "";
+
   Future<dynamic> getBookingDetails() async {
     final Map<String, dynamic> arguments =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
@@ -30,7 +31,7 @@ class _PreviewTransitState extends State<PreviewTransit> {
 
     BookingApi bookingApi = BookingApi(_accessToken);
     Response<dynamic> response =
-        await bookingApi.getTransitDetails(application);
+        await bookingApi.getBookingDetails(application);
 
     return response.data;
   }
@@ -338,14 +339,21 @@ class _PreviewTransitState extends State<PreviewTransit> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "Pick up and Drop off",
+                        "Boarding",
                         style: GoogleFonts.urbanist(
-                          fontSize: 24.0,
+                          fontSize: 32.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        formatDate(DateTime.parse(snapshot.data['schedule'])),
+                        "${snapshot.data['cage']['title']} sized cage",
+                        style: GoogleFonts.urbanist(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "${snapshot.data['daysOfStay']} day(s)",
                         style: GoogleFonts.urbanist(
                           fontSize: 14.0,
                           fontWeight: FontWeight.w600,
@@ -354,7 +362,7 @@ class _PreviewTransitState extends State<PreviewTransit> {
                       const SizedBox(height: 50.0),
                       ElevatedButton(
                         onPressed: () async {
-                          updateBookingStatus('confirmed');
+                          updateBookingStatus('done');
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -367,35 +375,9 @@ class _PreviewTransitState extends State<PreviewTransit> {
                           width: double.infinity,
                           child: Center(
                             child: Text(
-                              'Accept',
+                              'Done',
                               style: GoogleFonts.urbanist(
                                 color: AppColors.secondary,
-                                fontSize: 12.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          updateBookingStatus('declined');
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: AppColors.danger.withOpacity(0.3),
-                            width: 0.5,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                        ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Center(
-                            child: Text(
-                              "Decline",
-                              style: GoogleFonts.urbanist(
-                                color: AppColors.danger,
                                 fontSize: 12.0,
                               ),
                             ),

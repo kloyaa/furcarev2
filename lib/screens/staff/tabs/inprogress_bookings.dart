@@ -1,22 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furcarev2/consts/colors.dart';
-import 'package:furcarev2/endpoints/booking.dart';
 import 'package:furcarev2/endpoints/staff.dart';
-import 'package:furcarev2/enums/enum.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
-class StaffTabBookings extends StatefulWidget {
-  const StaffTabBookings({super.key});
+class StaffTabInprogressBookings extends StatefulWidget {
+  const StaffTabInprogressBookings({super.key});
 
   @override
-  State<StaffTabBookings> createState() => _StaffTabBookingsState();
+  State<StaffTabInprogressBookings> createState() =>
+      _StaffTabInprogressBookingsState();
 }
 
-class _StaffTabBookingsState extends State<StaffTabBookings> {
+class _StaffTabInprogressBookingsState
+    extends State<StaffTabInprogressBookings> {
   // State
   String _accessToken = "";
   String _status = "pending";
@@ -50,7 +50,7 @@ class _StaffTabBookingsState extends State<StaffTabBookings> {
     // Retrieve the access token from the provider and assign it to _accessToken
     _accessToken = accessTokenProvider.authToken?.accessToken ?? '';
 
-    handleGetBookings("pending");
+    handleGetBookings("confirmed");
   }
 
   @override
@@ -129,7 +129,7 @@ class _StaffTabBookingsState extends State<StaffTabBookings> {
                                   "boarding") {
                                 Navigator.pushNamed(
                                   context,
-                                  "/s/preview/boarding",
+                                  "/s/preview-inprogress/boarding",
                                   arguments: arguments,
                                 );
                               }
@@ -137,7 +137,7 @@ class _StaffTabBookingsState extends State<StaffTabBookings> {
                                   "transit") {
                                 Navigator.pushNamed(
                                   context,
-                                  "/s/preview/transit",
+                                  "/s/preview-inprogress/transit",
                                   arguments: arguments,
                                 );
                               }
@@ -145,7 +145,7 @@ class _StaffTabBookingsState extends State<StaffTabBookings> {
                                   "grooming") {
                                 Navigator.pushNamed(
                                   context,
-                                  "/s/preview/grooming",
+                                  "/s/preview-inprogress/grooming",
                                   arguments: arguments,
                                 );
                               }

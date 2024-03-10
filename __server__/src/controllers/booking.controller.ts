@@ -11,6 +11,7 @@ import { emitter } from "../_core/events/activity.event";
 import { IActivity } from "../_core/interfaces/activity.interface";
 import ServiceTransaction from "../models/service_transactions.schema";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
+import TransitApplication from "../models/transit_application.schema";
 
 export const getBookings = async (req: TRequest, res: TResponse) => {
     try {
@@ -29,8 +30,22 @@ export const getBookings = async (req: TRequest, res: TResponse) => {
                 }
             },
             {
+                $lookup: {
+                    from: "pets",
+                    localField: "pet",
+                    foreignField: "_id",
+                    as: "pet"
+                }
+            },
+            {
                 $unwind: {
                     path: "$profile",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $unwind: {
+                    path: "$pet",
                     preserveNullAndEmptyArrays: true
                 }
             }
@@ -51,12 +66,12 @@ export const getBookingsByAccessToken = async (req: TRequest, res: TResponse) =>
             status: req.query.status
         })
         const bookings = await Booking
-        .find({
-            user: req.user.id,
-            status: req.query.status ?? "pending"
-        })
-        .populate(['pet', 'staff'])
-        .sort({ createdAt: 'desc' });
+            .find({
+                user: req.user.id,
+                status: req.query.status ?? "pending"
+            })
+            .populate(['pet', 'staff'])
+            .sort({ createdAt: 'desc' });
         return res.status(200).json(bookings);
     } catch (error) {
         console.log("@getBookings error", error)
@@ -90,6 +105,23 @@ export const getBoardingApplicationsByAppId = async (req: TRequest, res: TRespon
         const application = await BoardingApplication
             .findById(req.params._id)
             .populate('cage');
+        if (!application) {
+            return res.status(400).json(statuses["02"]);
+        }
+        return res.status(200).json(application);
+    } catch (error) {
+        console.log("@getBookings error", error)
+        return res.status(500).json(statuses["0900"])
+    }
+}
+
+export const getTransitApplicationsByAppId = async (req: TRequest, res: TResponse) => {
+    try {
+        if (!isObjectIdOrHexString(req.params._id)) {
+            return res.status(400).json(statuses["0901"]);
+        }
+        const application = await TransitApplication
+            .findById(req.params._id)
         if (!application) {
             return res.status(400).json(statuses["02"]);
         }

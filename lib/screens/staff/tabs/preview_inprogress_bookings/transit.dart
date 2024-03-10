@@ -12,14 +12,15 @@ import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class PreviewTransit extends StatefulWidget {
-  const PreviewTransit({super.key});
+class PreviewInprogressTransit extends StatefulWidget {
+  const PreviewInprogressTransit({super.key});
 
   @override
-  State<PreviewTransit> createState() => _PreviewTransitState();
+  State<PreviewInprogressTransit> createState() =>
+      _PreviewInprogressTransitState();
 }
 
-class _PreviewTransitState extends State<PreviewTransit> {
+class _PreviewInprogressTransitState extends State<PreviewInprogressTransit> {
   // State
   String _accessToken = "";
   Future<dynamic> getBookingDetails() async {
@@ -354,7 +355,7 @@ class _PreviewTransitState extends State<PreviewTransit> {
                       const SizedBox(height: 50.0),
                       ElevatedButton(
                         onPressed: () async {
-                          updateBookingStatus('confirmed');
+                          updateBookingStatus('done');
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -367,35 +368,9 @@ class _PreviewTransitState extends State<PreviewTransit> {
                           width: double.infinity,
                           child: Center(
                             child: Text(
-                              'Accept',
+                              'Done',
                               style: GoogleFonts.urbanist(
                                 color: AppColors.secondary,
-                                fontSize: 12.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      OutlinedButton(
-                        onPressed: () async {
-                          updateBookingStatus('declined');
-                        },
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: AppColors.danger.withOpacity(0.3),
-                            width: 0.5,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                        ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Center(
-                            child: Text(
-                              "Decline",
-                              style: GoogleFonts.urbanist(
-                                color: AppColors.danger,
                                 fontSize: 12.0,
                               ),
                             ),

@@ -23,6 +23,9 @@ class UploadQR extends StatefulWidget {
 }
 
 class _UploadQRState extends State<UploadQR> {
+  TextEditingController _refController = TextEditingController();
+  late FocusNode _refFocus;
+
   File? _selectedImage;
 
   Future<void> _selectImage() async {
@@ -33,6 +36,21 @@ class _UploadQRState extends State<UploadQR> {
         _selectedImage = File(pickedFile.path);
       });
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _refFocus = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _refFocus.dispose();
   }
 
   @override
@@ -76,21 +94,46 @@ class _UploadQRState extends State<UploadQR> {
               ),
             ),
             const SizedBox(height: 40.0),
-            Text(
-              "Ref No. FURC${widget.referenceNo.toUpperCase().substring(10, widget.referenceNo.length)}",
-              style: GoogleFonts.urbanist(
-                color: AppColors.primary,
-                fontSize: 14.0,
-                fontWeight: FontWeight.w600,
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: TextFormField(
+                controller: _refController,
+                focusNode: _refFocus,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  fillColor: AppColors.primary,
+                  labelText: "Reference No.",
+                  labelStyle: GoogleFonts.urbanist(
+                    color: AppColors.primary.withOpacity(0.5),
+                    fontSize: 10.0,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.numbers_outlined,
+                    size: 18.0,
+                    color: AppColors.primary.withOpacity(0.8),
+                  ),
+                  prefixIconColor: AppColors.primary,
+                  border: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  floatingLabelAlignment: FloatingLabelAlignment.start,
+                ),
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontSize: 12.0,
+                ),
               ),
             ),
-            const SizedBox(height: 5.0),
+            const SizedBox(height: 25.0),
             Text(
-              "Date ${formatDate(DateTime.parse(widget.date))}",
+              "Transaction Date ${formatDate(DateTime.parse(widget.date))}",
               style: GoogleFonts.urbanist(
                 color: AppColors.primary.withOpacity(0.6),
-                fontSize: 10.0,
-                fontWeight: FontWeight.w600,
+                fontSize: 8.0,
+                fontWeight: FontWeight.w400,
               ),
             ),
             const Spacer(flex: 3),

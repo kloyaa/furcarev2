@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:furcarev2/classes/client.dart';
-import 'package:furcarev2/classes/customer.dart';
 import 'package:furcarev2/classes/login_response.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/endpoints/app.dart';
@@ -9,11 +8,9 @@ import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/app.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/client.dart';
-import 'package:furcarev2/screens/customer/tabs/bookings.dart';
-import 'package:furcarev2/screens/customer/tabs/dashboard.dart';
-import 'package:furcarev2/screens/customer/tabs/pets.dart';
 import 'package:furcarev2/screens/customer/tabs/settings.dart';
 import 'package:furcarev2/screens/staff/tabs/bookings.dart';
+import 'package:furcarev2/screens/staff/tabs/inprogress_bookings.dart';
 import 'package:furcarev2/screens/staff/tabs/settings.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
@@ -174,7 +171,7 @@ class _StaffMainState extends State<StaffMain> {
         index: _currentIndex,
         children: const [
           StaffTabBookings(),
-          CustomerTabSettings(),
+          StaffTabInprogressBookings(),
           StaffTabSettings(),
         ],
       ),

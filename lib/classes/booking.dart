@@ -54,3 +54,20 @@ class TransitgPayload {
     };
   }
 }
+
+class UpdateBookingStatusPayload {
+  final String status;
+  final String booking;
+
+  UpdateBookingStatusPayload({
+    required this.status,
+    required this.booking,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'booking': booking,
+    };
+  }
+}

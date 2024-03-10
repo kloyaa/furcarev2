@@ -75,4 +75,26 @@ class BookingApi {
       rethrow;
     }
   }
+
+  Future<Response> getGroomingDetails(String id) async {
+    try {
+      Response response = await dio.get(
+        '/staff/v1/booking/grooming/$id',
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
+  Future<Response> getTransitDetails(String id) async {
+    try {
+      Response response = await dio.get(
+        '/staff/v1/booking/transit/$id',
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
 }

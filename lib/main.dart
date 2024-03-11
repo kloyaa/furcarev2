@@ -8,6 +8,7 @@ import 'package:furcarev2/screens/admin/reports/screen_service_usage.dart';
 import 'package:furcarev2/screens/admin/reports/screen_transactions.dart';
 import 'package:furcarev2/screens/admin/screen_customer_management.dart';
 import 'package:furcarev2/screens/admin/screen_profile.dart';
+import 'package:furcarev2/screens/admin/screen_staff_edit.dart';
 import 'package:furcarev2/screens/admin/screen_staff_enrollment.dart';
 import 'package:furcarev2/screens/admin/screen_staff_management.dart';
 import 'package:furcarev2/screens/auth/login/screen_admin_login.dart';
@@ -66,8 +67,8 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          // '/': (context) => const ScreenAdminLogin(), // for admin
-          '/': (context) => const ScreenStaffLogin(), // for staff
+          '/': (context) => const ScreenAdminLogin(), // for admin
+          // '/': (context) => const ScreenStaffLogin(), // for staff
           // '/': (context) => const ScreenCustomerLogin(), // for customer
 
           '/c/register': (context) => const ScreenCustomerRegister(),
@@ -100,6 +101,7 @@ class MyApp extends StatelessWidget {
           '/a/management/staff': (context) => const AdminStaffManagement(),
           '/a/management/staff/enrollment': (context) =>
               const AdminStaffEnrollment(),
+          '/a/management/staff/edit': (context) => const AdminStaffEdit(),
           '/a/management/customers': (context) =>
               const AdminCustomerManagement(),
           '/a/report/checkins': (context) => const Checkins(),

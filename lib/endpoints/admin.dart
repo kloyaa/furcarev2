@@ -54,6 +54,18 @@ class AdminApi {
     }
   }
 
+  Future<Response> updateProfile(Map profile, String id) async {
+    try {
+      Response response = await dio.put(
+        '/admin/v1/management/profile/$id',
+        data: profile,
+      );
+      return response;
+    } on DioException {
+      rethrow;
+    }
+  }
+
   Future<Response> geCheckins() async {
     try {
       Response response = await dio.get('/admin/v1/stats/checkins');

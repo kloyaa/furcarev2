@@ -6,12 +6,14 @@ import Booking from "../models/booking.schema";
 import GroomingApplication from "../models/grooming_application.schema";
 import { validateUpdateBookingStatusById } from "../_core/validators/application.validator";
 import { BookingStatus } from "../_core/enum/booking.enum";
-import { EventName } from "../_core/enum/activity.enum";
+import { ActivityType, EventName } from "../_core/enum/activity.enum";
 import { emitter } from "../_core/events/activity.event";
 import { IActivity } from "../_core/interfaces/activity.interface";
 import ServiceTransaction from "../models/service_transactions.schema";
 import { findServiceFeeByTitle } from "../services/service_fee.service";
 import TransitApplication from "../models/transit_application.schema";
+import { validateUpdateProfile } from "../_core/validators/user.validator";
+import Profile from "../models/profile.schema";
 
 export const getBookings = async (req: TRequest, res: TResponse) => {
     try {
@@ -272,5 +274,42 @@ export const getTransactions = async (req: TRequest, res: TResponse) => {
     } catch (error) {
         console.log("@getTransactions error", error)
         return res.status(500).json(statuses["0900"])
+    }
+}
+
+export const updateProfileById = async (req: TRequest, res: TResponse) => {
+    const error = validateUpdateProfile(req.body);
+    if (error) {
+        return res.status(400).json({
+            ...statuses['501'],
+            message: error.details[0].message.replace(/['"]/g, ''),
+        });
+    }
+    const profile = req.params._id;
+    if (!isObjectIdOrHexString(profile)) {
+        return res.status(400).json(statuses["0901"]);
+    }
+    try {
+        const existingProfile = await Profile.findById(profile);
+        if (!existingProfile) {
+            return res.status(404).json(statuses['0104']);
+        }
+
+        const { firstName, lastName, birthdate, address, contact, gender } = req.body;
+
+        // Update the existing profile fields
+        existingProfile.firstName = firstName;
+        existingProfile.lastName = lastName;
+        existingProfile.birthdate = birthdate;
+        existingProfile.address = address;
+        existingProfile.contact = contact;
+        existingProfile.gender = gender;
+
+        await existingProfile.save();
+
+        return res.status(200).json(statuses['0101']);
+    } catch (error) {
+        console.log('@updateProfileById error', error);
+        return res.status(500).json(statuses['0900']);
     }
 }

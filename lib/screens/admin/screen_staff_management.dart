@@ -320,6 +320,8 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                     final staff = staffList[index];
 
                     final bool isActive = staff['profile']['isActive'];
+                    final Map user = staffList[index];
+
                     return Container(
                       padding: const EdgeInsets.all(50.0),
                       margin: const EdgeInsets.only(bottom: 10.0),
@@ -659,9 +661,11 @@ class _AdminStaffManagementState extends State<AdminStaffManagement> {
                                 children: [
                                   ElevatedButton(
                                     onPressed: () async {
-                                      if (context.mounted) {
-                                        // handleSaveBasicInfo();
-                                      }
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        "/a/management/staff/edit",
+                                        arguments: user,
+                                      );
                                     },
                                     style: ElevatedButton.styleFrom(
                                       foregroundColor: Colors.white,

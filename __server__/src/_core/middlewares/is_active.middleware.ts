@@ -1,4 +1,4 @@
-import Profile from '../../models/profile.model';
+import Profile from '../../models/profile.schema';
 import { statuses } from '../const/api.statuses';
 import { TRequest } from '../interfaces/overrides.interface';
 import { isEmpty } from '../utils/utils';

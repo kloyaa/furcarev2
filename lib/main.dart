@@ -67,9 +67,9 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/',
         routes: {
-          '/': (context) => const ScreenAdminLogin(), // for admin
-          // '/': (context) => const ScreenStaffLogin(), // for staff
-          // '/': (context) => const ScreenCustomerLogin(), // for customer
+          // '/': (context) => const ScreenAdminLogin(), // for admin
+          '/': (context) => const ScreenStaffLogin(), // for staff
+          // '/': (context) => const ScreenCustomerLogin(), // for customerk
 
           '/c/register': (context) => const ScreenCustomerRegister(),
           '/c/main': (context) => const CustomerMain(), // for admin

@@ -354,7 +354,11 @@ class _PreviewTransitState extends State<PreviewTransit> {
                       const SizedBox(height: 50.0),
                       ElevatedButton(
                         onPressed: () async {
-                          updateBookingStatus('confirmed');
+                          execOnConfirm(
+                            message: "Accept booking?",
+                            method: () => updateBookingStatus('confirmed'),
+                            context,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -378,7 +382,11 @@ class _PreviewTransitState extends State<PreviewTransit> {
                       ),
                       OutlinedButton(
                         onPressed: () async {
-                          updateBookingStatus('declined');
+                          execOnConfirm(
+                            message: "Decline booking?",
+                            method: () => updateBookingStatus('declined'),
+                            context,
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(

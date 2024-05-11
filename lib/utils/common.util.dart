@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:furcarev2/consts/colors.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -75,4 +76,119 @@ Icon getIconByService(String service) {
   }
 
   return const Icon(Ionicons.checkbox_outline);
+}
+
+void redirectOnConfirm(
+  BuildContext context, {
+  String message = "Continue with your action?",
+  String path = "/",
+}) {
+  showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: Text(
+            'Confirmation',
+            style: GoogleFonts.urbanist(
+              color: AppColors.primary.withOpacity(1),
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+            ),
+          ),
+          content: Text(
+            message,
+            style: GoogleFonts.urbanist(
+              color: AppColors.primary.withOpacity(1),
+              fontWeight: FontWeight.w400,
+              fontSize: 14.0,
+            ),
+          ),
+          actions: [
+            // The "Yes" button
+            TextButton(
+                onPressed: () {
+                  Navigator.pushReplacementNamed(
+                    context,
+                    path,
+                  );
+                },
+                child: Text(
+                  'Yes',
+                  style: GoogleFonts.urbanist(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0,
+                  ),
+                )),
+            TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'No',
+                  style: GoogleFonts.urbanist(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0,
+                  ),
+                ))
+          ],
+        );
+      });
+}
+
+void execOnConfirm(
+  BuildContext context, {
+  String message = "Continue with your action?",
+  required Function method,
+}) {
+  showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          title: Text(
+            'Confirmation',
+            style: GoogleFonts.urbanist(
+              color: AppColors.primary.withOpacity(1),
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+            ),
+          ),
+          content: Text(
+            message,
+            style: GoogleFonts.urbanist(
+              color: AppColors.primary.withOpacity(1),
+              fontWeight: FontWeight.w400,
+              fontSize: 14.0,
+            ),
+          ),
+          actions: [
+            // The "Yes" button
+            TextButton(
+                onPressed: () => method(),
+                child: Text(
+                  'Yes',
+                  style: GoogleFonts.urbanist(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0,
+                  ),
+                )),
+            TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'No',
+                  style: GoogleFonts.urbanist(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0,
+                  ),
+                ))
+          ],
+        );
+      });
 }

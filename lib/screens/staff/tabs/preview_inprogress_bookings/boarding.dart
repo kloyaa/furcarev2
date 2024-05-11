@@ -7,6 +7,7 @@ import 'package:furcarev2/endpoints/booking.dart';
 import 'package:furcarev2/endpoints/staff.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/screens/success.dart';
+import 'package:furcarev2/utils/common.util.dart';
 import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -362,7 +363,11 @@ class _PreviewInprogressBoardingState extends State<PreviewInprogressBoarding> {
                       const SizedBox(height: 50.0),
                       ElevatedButton(
                         onPressed: () async {
-                          updateBookingStatus('done');
+                          execOnConfirm(
+                            message: "Complete booking?",
+                            method: () => updateBookingStatus('done'),
+                            context,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

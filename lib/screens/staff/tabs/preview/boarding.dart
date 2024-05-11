@@ -7,6 +7,7 @@ import 'package:furcarev2/endpoints/booking.dart';
 import 'package:furcarev2/endpoints/staff.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/screens/success.dart';
+import 'package:furcarev2/utils/common.util.dart';
 import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -361,7 +362,11 @@ class _PreviewBoardingState extends State<PreviewBoarding> {
                       const SizedBox(height: 50.0),
                       ElevatedButton(
                         onPressed: () async {
-                          updateBookingStatus('confirmed');
+                          execOnConfirm(
+                            message: "Accept booking?",
+                            method: () => updateBookingStatus('confirmed'),
+                            context,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -385,7 +390,11 @@ class _PreviewBoardingState extends State<PreviewBoarding> {
                       ),
                       OutlinedButton(
                         onPressed: () async {
-                          updateBookingStatus('declined');
+                          execOnConfirm(
+                            message: "Decline booking?",
+                            method: () => updateBookingStatus('declined'),
+                            context,
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(

@@ -10,6 +10,7 @@ import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/client.dart';
 import 'package:furcarev2/screens/customer/payment/preview.dart';
+import 'package:furcarev2/utils/common.util.dart';
 import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -196,7 +197,6 @@ class _BookBoardingState extends State<BookBoarding> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                padding: const EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15.0),
@@ -204,7 +204,6 @@ class _BookBoardingState extends State<BookBoarding> {
                 child: CalendarDatePicker2(
                   config: CalendarDatePicker2Config(
                     calendarType: CalendarDatePicker2Type.single,
-                    controlsHeight: 30,
                   ),
                   value: const [],
                   onValueChanged: (dates) {
@@ -383,7 +382,11 @@ class _BookBoardingState extends State<BookBoarding> {
             const SizedBox(height: 10.0),
             ElevatedButton(
               onPressed: () async {
-                handleSubmitBooking();
+                execOnConfirm(
+                  message: "Proceed with board booking",
+                  method: () => handleSubmitBooking(),
+                  context,
+                );
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,

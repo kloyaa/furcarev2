@@ -188,8 +188,17 @@ class _CreateProfileStep1State extends State<CreateProfileStep1> {
                 ),
               ),
               const SizedBox(height: 10.0),
+              Text(
+                'Birthday',
+                style: GoogleFonts.urbanist(
+                  color: AppColors.primary.withOpacity(0.5),
+                  fontWeight: FontWeight.w400,
+                  fontSize: 8.0,
+                ),
+              ),
+              const SizedBox(height: 10.0),
               Container(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(5.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15.0),
@@ -197,15 +206,6 @@ class _CreateProfileStep1State extends State<CreateProfileStep1> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Birthday',
-                      style: GoogleFonts.urbanist(
-                        color: AppColors.primary.withOpacity(0.5),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 8.0,
-                      ),
-                    ),
-                    const SizedBox(height: 10.0),
                     CalendarDatePicker2(
                       config: CalendarDatePicker2Config(
                         calendarType: CalendarDatePicker2Type.single,

@@ -8,6 +8,7 @@ import 'package:furcarev2/endpoints/user.dart';
 import 'package:furcarev2/providers/authentication.dart';
 import 'package:furcarev2/providers/client.dart';
 import 'package:furcarev2/screens/customer/payment/preview.dart';
+import 'package:furcarev2/utils/common.util.dart';
 import 'package:furcarev2/widgets/snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -239,7 +240,11 @@ class _BookGroomingState extends State<BookGrooming> {
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
-                handleSubmit();
+                execOnConfirm(
+                  message: "Proceed with pet grooming appointment",
+                  method: () => handleSubmit(),
+                  context,
+                );
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,

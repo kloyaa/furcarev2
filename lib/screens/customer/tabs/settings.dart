@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:furcarev2/consts/colors.dart';
 import 'package:furcarev2/consts/config.dart';
+import 'package:furcarev2/utils/common.util.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -168,10 +169,7 @@ class _CustomerTabSettingsState extends State<CustomerTabSettings> {
               ),
               tileColor: Colors.white,
               onTap: () {
-                Navigator.pushReplacementNamed(
-                  context,
-                  '/',
-                );
+                redirectOnConfirm(context);
               },
               // Add any other content you want here
             )

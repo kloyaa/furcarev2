@@ -355,7 +355,11 @@ class _PreviewInprogressTransitState extends State<PreviewInprogressTransit> {
                       const SizedBox(height: 50.0),
                       ElevatedButton(
                         onPressed: () async {
-                          updateBookingStatus('done');
+                          execOnConfirm(
+                            message: "Complete booking?",
+                            method: () => updateBookingStatus('done'),
+                            context,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white,

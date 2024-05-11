@@ -243,7 +243,11 @@ class _BookTransitState extends State<BookTransit> {
             const Spacer(),
             ElevatedButton(
               onPressed: () async {
-                handleSubmit();
+                execOnConfirm(
+                  message: "Proceed with appointment",
+                  method: () => handleSubmit(),
+                  context,
+                );
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
